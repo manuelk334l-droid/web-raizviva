@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Mi panel · RaízViva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--v:#8ba888;--vo:#4a5d45;--t:#c17b5c;--b:#e8dfd0;--c:#fdfbf7;--f:#f5f0e8;--tx:#3a3a30;--mu:#6b6b5e;--am:#e6b862}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Poppins',sans-serif;background:var(--f);color:var(--tx);min-height:100vh}
+h1,h2,h3,.logo{font-family:'Cormorant Garamond',Georgia,serif;color:var(--vo)}
+.logo{font-size:24px;font-weight:700}.logo i{color:var(--t)}
+.oculto{display:none!important}
+/* Login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,#e9efe5,transparent 50%),var(--f)}
+.card-login{background:var(--c);width:100%;max-width:400px;border-radius:26px;padding:36px 32px;box-shadow:0 20px 50px rgba(74,93,69,.12);text-align:center}
+.card-login h1{font-size:30px;margin:14px 0 4px}.card-login p{font-size:13px;color:var(--mu);margin-bottom:22px}
+label{display:block;text-align:left;font-size:13px;font-weight:500;margin:14px 0 6px}
+input{width:100%;padding:13px 16px;border:1.5px solid var(--b);border-radius:14px;font:inherit;font-size:14px;background:#fff;color:var(--tx)}
+input:focus{outline:none;border-color:var(--v);box-shadow:0 0 0 3px rgba(139,168,136,.2)}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--vo);color:#fff;border-radius:99px;padding:12px 24px;font:inherit;font-size:14px;font-weight:500}
+.btn:hover{background:#3b4a37}.btn:disabled{opacity:.6;cursor:wait}
+.btn.full{width:100%;margin-top:22px}.btn.wa{background:#25a05a}.btn.suave{background:var(--b);color:var(--vo)}
+.err{color:#b5483a;font-size:13px;margin-top:12px;min-height:18px}
+.nota{font-size:12px;color:var(--mu);margin-top:16px}
+/* Panel */
+header{background:var(--c);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 14px rgba(0,0,0,.05);position:sticky;top:0;z-index:5}
+.usr{display:flex;align-items:center;gap:12px;font-size:14px}
+.usr b{width:38px;height:38px;border-radius:50%;background:var(--v);color:#fff;display:grid;place-items:center}
+.salir{background:none;border:1.5px solid var(--b);border-radius:99px;padding:7px 16px;font:inherit;font-size:13px;cursor:pointer;color:var(--mu)}
+main{max-width:1180px;margin:0 auto;padding:28px 32px 56px}
+.hero{background:linear-gradient(135deg,var(--vo),#5f7a59);color:#fff;border-radius:24px;padding:28px 32px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hero h1{color:#fff;font-size:34px}.hero p{opacity:.85;font-size:14px;margin-top:6px}
+.nivel{min-width:280px;flex:1;max-width:420px}.nivel .tp{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+.bar{height:12px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#d9e6d3,var(--am));transition:width .8s}
+.nivel small{display:block;margin-top:8px;opacity:.9;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
+.k{background:var(--c);border-radius:18px;padding:18px 20px;border-left:4px solid var(--v)}
+.k:nth-child(2){border-color:var(--t)}.k:nth-child(3){border-color:var(--am)}.k:nth-child(4){border-color:#8b9fb8}
+.k small{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+.k div{font-family:'Cormorant Garamond',Georgia,serif;font-size:32px;font-weight:700;color:var(--vo);margin-top:4px;word-break:break-word}
+.k span{font-size:12px;color:#5f8a5a}.k span.neg{color:#b5483a}.k span.neu{color:var(--mu)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.card{background:var(--c);border-radius:20px;padding:22px 24px;margin-bottom:16px}
+.card h3{font-size:22px;margin-bottom:4px}.sub{font-size:12px;color:var(--mu);margin-bottom:14px}
+.link{display:flex;gap:10px;background:var(--f);border:1px dashed var(--v);border-radius:14px;padding:10px 12px;align-items:center;justify-content:space-between;font-size:14px}
+.link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.link .btn{padding:8px 18px;font-size:13px;flex-shrink:0}
+.share{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.share .btn{font-size:12px;padding:8px 16px}
+svg.graf{width:100%;height:190px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:420px}
+th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);padding:8px 6px;border-bottom:1px solid var(--b)}
+td{padding:11px 6px;border-bottom:1px solid var(--f)}
+.bd{padding:3px 12px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap}
+.bd.a{background:#e1ecdd;color:#3f6b3a}.bd.p{background:#f7ead3;color:#8a6420}.bd.n{background:#e6e9ef;color:#4a5a74}
+.vacio{font-size:13px;color:var(--mu);padding:14px 0}
+.ck{list-style:none;padding:0;font-size:13px}.ck li{padding:9px 0;border-bottom:1px solid var(--f);display:flex;gap:10px;align-items:center}
+.ck i{width:20px;height:20px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;background:var(--b);color:var(--mu)}
+.ck .ok i{background:var(--v);color:#fff}
+.ann{background:linear-gradient(135deg,#f9ece3,#f5f0e8);border-left:4px solid var(--t)}
+.ann p{font-size:13px;color:var(--mu);line-height:1.5}.tag{display:inline-block;margin-top:8px;font-size:11px;color:var(--t);font-weight:600;letter-spacing:.06em}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(40,50,38,.55);display:grid;place-items:center;padding:20px;z-index:20}
+.modal .card-login{text-align:left}.modal h2{font-size:26px;margin-bottom:4px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--vo);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;z-index:30}
+@media(max-width:760px){
+  main{padding:18px 14px 40px}header{padding:12px 16px}.kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}
+  .hero{padding:22px}.hero h1{font-size:27px}.usr span{display:none}.nivel{min-width:0}.k div{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <form class="card-login" id="formLogin" autocomplete="on">
+    <div class="logo">Raíz<i>Viva</i></div>
+    <h1>Tu panel</h1>
+    <p>Entra para ver tu progreso, tus referidas y tus comisiones.</p>
+    <label for="email">Correo</label>
+    <input id="email" type="email" autocomplete="username" required maxlength="150">
+    <label for="clave">Clave</label>
+    <input id="clave" type="password" autocomplete="current-password" required maxlength="200">
+    <div class="err" id="loginError" role="alert"></div>
+    <button class="btn full" id="btnLogin" type="submit">Entrar</button>
+    <p class="nota">¿Olvidaste tu clave? Pídele a tu líder que te genere una nueva.</p>
+  </form>
+</section>
+
+<div id="app" class="oculto">
+  <header>
+    <div class="logo">Raíz<i>Viva</i></div>
+    <div class="usr"><span id="hNombre"></span><b id="hInicial"></b><button class="salir" id="btnSalir">Salir</button></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><h1 id="saludo"></h1><p>Cada paso cuenta. Así vas este mes.</p></div>
+      <div class="nivel">
+        <div class="tp"><span id="nivelActual"></span><span id="nivelSig"></span></div>
+        <div class="bar"><span id="nivelBarra" style="width:0"></span></div>
+        <small id="nivelTexto"></small>
+      </div>
+    </section>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h3>Tu link personal</h3>
+          <div class="sub">Quien se registre con este link queda como tu referida.</div>
+          <div class="link"><span id="enlaceTexto"></span><button class="btn" id="btnCopiar" type="button">Copiar</button></div>
+          <div class="share"><button class="btn wa" id="btnWa" type="button">Compartir por WhatsApp</button></div>
+        </div>
+        <div class="card">
+          <h3>Mis ventas</h3>
+          <div class="sub">Últimos 6 meses</div>
+          <div id="grafica"></div>
+        </div>
+        <div class="card">
+          <h3>Mis referidas</h3>
+          <div class="sub">Seguimiento de cada persona que entró con tu link</div>
+          <div class="scroll" id="tablaReferidas"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card ann oculto" id="cardAnuncio">
+          <h3>Mensaje de tu líder</h3>
+          <p id="anuncioTexto"></p><span class="tag" id="anuncioAutor"></span>
+        </div>
+        <div class="card">
+          <h3>Tu ruta de crecimiento</h3>
+          <div class="sub" id="rutaSub"></div>
+          <ul class="ck" id="ruta"></ul>
+        </div>
+        <div class="card" id="cardMeta">
+          <h3>Próxima meta 🎯</h3>
+          <div class="sub" id="metaNivel"></div>
+          <div class="bar" style="background:var(--b)"><span id="metaBarra" style="width:0;background:linear-gradient(90deg,var(--v),var(--t))"></span></div>
+          <p class="sub" style="margin-top:10px" id="metaTexto"></p>
+        </div>
+        <button class="btn suave" id="btnClave" type="button" style="width:100%">Cambiar mi clave</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal oculto" id="modalClave">
+  <form class="card-login" id="formClave">
+    <h2 id="claveTitulo">Cambiar mi clave</h2>
+    <p id="claveAviso">Usa mínimo 10 caracteres, con letras y números.</p>
+    <label for="cActual">Clave actual</label>
+    <input id="cActual" type="password" autocomplete="current-password" required maxlength="200">
+    <label for="cNueva">Nueva clave</label>
+    <input id="cNueva" type="password" autocomplete="new-password" required minlength="10" maxlength="128">
+    <label for="cRepite">Repite la nueva clave</label>
+    <input id="cRepite" type="password" autocomplete="new-password" required minlength="10" maxlength="128">
+    <div class="err" id="claveError" role="alert"></div>
+    <button class="btn full" id="btnGuardarClave" type="submit">Guardar</button>
+    <button class="btn suave full oculto" id="btnCancelarClave" type="button" style="margin-top:10px">Cancelar</button>
+  </form>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cop = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+  let token = sessionStorage.getItem('vtoken') || '';
+  let enlace = '';
+  let obligatorio = false;
+
+  function toast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2400);
+  }
+
+  async function api(ruta, opciones = {}) {
+    const res = await fetch('/api/vendedora' + ruta, {
+      ...opciones,
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }
+    });
+    let json = {};
+    try { json = await res.json(); } catch {}
+    if (res.status === 401 && token && ruta !== '/cambiar-clave') { salir(); }
+    if (!res.ok || json.ok === false) throw new Error(json.mensaje || 'Error de conexión');
+    return json;
+  }
+
+  function salir() {
+    sessionStorage.removeItem('vtoken'); token = '';
+    $('app').classList.add('oculto'); $('login').classList.remove('oculto');
+    $('modalClave').classList.add('oculto');
+  }
+
+  /* ---------- Login ---------- */
+  $('formLogin').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('btnLogin'); $('loginError').textContent = ''; btn.disabled = true;
+    try {
+      const r = await api('/login', { method: 'POST', body: JSON.stringify({ email: $('email').value, clave: $('clave').value }) });
+      token = r.token; sessionStorage.setItem('vtoken', token); $('clave').value = '';
+      await cargar();
+    } catch (err) { $('loginError').textContent = err.message; }
+    btn.disabled = false;
+  });
+  $('btnSalir').addEventListener('click', salir);
+
+  /* ---------- Panel ---------- */
+  const ESTADOS = {
+    'activo': ['a', 'Activa'], 'en-proceso': ['p', 'En proceso'], 'contactado': ['p', 'Contactada'],
+    'nuevo': ['n', 'Nueva'], 'descartado': ['n', 'Cerrada']
+  };
+  const fecha = (iso) => new Date(iso).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+
+  async function cargar() {
+    const { data } = await api('/panel');
+    pintar(data);
+    $('login').classList.add('oculto'); $('app').classList.remove('oculto');
+    if (data.perfil.debeCambiarClave) abrirClave(true);
+  }
+
+  function pintar(d) {
+    const primero = d.perfil.nombre.split(' ')[0];
+    $('hNombre').textContent = d.perfil.nombre;
+    $('hInicial').textContent = primero[0].toUpperCase();
+    $('saludo').textContent = `Hola, ${primero} 🌿`;
+
+    const n = d.nivel;
+    $('nivelActual').textContent = `${n.actual.emoji} ${n.actual.nombre} · ${n.actual.comisionPct}% comisión`;
+    $('nivelSig').textContent = n.siguiente ? `${n.siguiente.emoji} ${n.siguiente.nombre}` : '';
+    $('nivelBarra').style.width = n.progreso + '%';
+    $('nivelTexto').textContent = n.siguiente
+      ? `${n.progreso}% · te faltan ${n.siguiente.faltan} referida${n.siguiente.faltan === 1 ? '' : 's'} activa${n.siguiente.faltan === 1 ? '' : 's'} para subir de nivel`
+      : 'Llegaste al nivel más alto 🎉';
+
+    const k = d.kpis, v = k.ventasMes.variacion;
+    const varTxt = v === null ? ['neu', 'Sin datos del mes anterior'] : v >= 0 ? ['', `↑ +${v}% vs mes anterior`] : ['neg', `↓ ${v}% vs mes anterior`];
+    $('kpis').innerHTML = `
+      <div class="k"><small>Mis referidas</small><div>${k.referidas.total}</div><span>${k.referidas.esteMes > 0 ? '↑ +' + k.referidas.esteMes + ' este mes' : esc(k.activas + ' activas')}</span></div>
+      <div class="k"><small>Ventas del mes</small><div>${cop.format(k.ventasMes.actual)}</div><span class="${varTxt[0]}">${varTxt[1]}</span></div>
+      <div class="k"><small>Comisión del mes</small><div>${cop.format(k.comisiones.mes)}</div><span class="neu">Pendiente de pago: ${cop.format(k.comisiones.pendiente)}</span></div>
+      <div class="k"><small>Posición en el equipo</small><div>${k.posicion.lugar ? '#' + k.posicion.lugar : '—'}</div><span class="neu">${k.posicion.total ? 'de ' + k.posicion.total + ' vendedoras' : ''}</span></div>`;
+
+    enlace = `${location.origin}/r/${d.perfil.codigoRef}`;
+    $('enlaceTexto').textContent = enlace;
+
+    $('grafica').innerHTML = grafica(d.serie);
+
+    $('tablaReferidas').innerHTML = d.referidas.length === 0
+      ? '<div class="vacio">Aún no tienes referidas. Comparte tu link y aparecerán aquí 🌱</div>'
+      : `<table><tr><th>Nombre</th><th>Ciudad</th><th>Ingreso</th><th>Estado</th></tr>${d.referidas.map(r => {
+          const e = ESTADOS[r.estado] || ['n', r.estado];
+          return `<tr><td><b>${esc(r.nombre)}</b></td><td>${esc(r.ciudad)}</td><td>${fecha(r.fecha)}</td><td><span class="bd ${e[0]}">${esc(e[1])}</span></td></tr>`;
+        }).join('')}</table>`;
+
+    const hechos = d.ruta.filter(x => x.hecho).length;
+    $('rutaSub').textContent = `${hechos} de ${d.ruta.length} pasos completados`;
+    $('ruta').innerHTML = d.ruta.map((x, i) => `<li class="${x.hecho ? 'ok' : ''}"><i>${x.hecho ? '✓' : i + 1}</i>${esc(x.texto)}</li>`).join('');
+
+    if (n.siguiente) {
+      $('metaNivel').textContent = `Nivel ${n.siguiente.nombre} ${n.siguiente.emoji}`;
+      $('metaBarra').style.width = n.progreso + '%';
+      $('metaTexto').textContent = `Con ese nivel tu comisión sube a ${n.siguiente.comisionPct}%.`;
+    } else {
+      $('metaNivel').textContent = 'Nivel máximo';
+      $('metaBarra').style.width = '100%';
+      $('metaTexto').textContent = 'Sigue compartiendo tu link para mantenerlo.';
+    }
+
+    $('cardAnuncio').classList.toggle('oculto', !d.anuncio);
+    if (d.anuncio) {
+      $('anuncioTexto').textContent = d.anuncio.texto;
+      $('anuncioAutor').textContent = d.anuncio.autor ? d.anuncio.autor.toUpperCase() + ' · TU LÍDER' : 'TU LÍDER';
+    }
+  }
+
+  function grafica(s) {
+    const W = 600, H = 190, L = 40, R = 570, T = 20, B = 160;
+    const max = Math.max(...s.valores, 1);
+    const paso = (R - L) / Math.max(s.valores.length - 1, 1);
+    const pts = s.valores.map((v, i) => [L + paso * i, B - (B - T) * (v / max)]);
+    const linea = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const area = `${linea} L${pts[pts.length - 1][0]} ${B} L${pts[0][0]} ${B}Z`;
+    const grid = [0, .5, 1].map(f => `<line x1="${L}" x2="${R}" y1="${B - (B - T) * f}" y2="${B - (B - T) * f}" stroke="#8ba88830"/>`).join('');
+    const etq = s.etiquetas.map((e, i) => `<text x="${pts[i][0]}" y="184" font-size="11" fill="#6b6b5e" text-anchor="middle">${esc(e)}</text>`).join('');
+    const puntos = pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="#4a5d45"/>`).join('');
+    const aviso = s.valores.every(v => v === 0) ? `<text x="${W / 2}" y="95" font-size="13" fill="#6b6b5e" text-anchor="middle">Aún no hay ventas registradas</text>` : '';
+    return `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ventas de los últimos 6 meses">
+      <defs><linearGradient id="gr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8ba888" stop-opacity=".5"/><stop offset="1" stop-color="#8ba888" stop-opacity=".02"/></linearGradient></defs>
+      ${grid}<path d="${area}" fill="url(#gr)"/><path d="${linea}" fill="none" stroke="#4a5d45" stroke-width="3"/>${puntos}${etq}${aviso}</svg>`;
+  }
+
+  /* ---------- Link ---------- */
+  $('btnCopiar').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(enlace); toast('Link copiado ✓'); }
+    catch { window.prompt('Copia tu link:', enlace); }
+  });
+  $('btnWa').addEventListener('click', () => {
+    const msg = `Hola 🌿 Te invito a conocer RaízViva y crecer con propósito. Regístrate aquí: ${enlace}`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  });
+
+  /* ---------- Cambio de clave ---------- */
+  function abrirClave(forzado) {
+    obligatorio = forzado;
+    $('claveTitulo').textContent = forzado ? 'Crea tu clave personal' : 'Cambiar mi clave';
+    $('claveAviso').textContent = forzado
+      ? 'Entraste con una clave temporal. Por seguridad, crea una propia (mínimo 10 caracteres, con letras y números).'
+      : 'Usa mínimo 10 caracteres, con letras y números.';
+    $('btnCancelarClave').classList.toggle('oculto', forzado);
+    $('formClave').reset(); $('claveError').textContent = '';
+    $('modalClave').classList.remove('oculto');
+    $('cActual').focus();
+  }
+  $('btnClave').addEventListener('click', () => abrirClave(false));
+  $('btnCancelarClave').addEventListener('click', () => $('modalClave').classList.add('oculto'));
+
+  $('formClave').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('claveError').textContent = '';
+    if ($('cNueva').value !== $('cRepite').value) { $('claveError').textContent = 'Las claves nuevas no coinciden'; return; }
+    $('btnGuardarClave').disabled = true;
+    try {
+      const r = await api('/cambiar-clave', { method: 'POST', body: JSON.stringify({ actual: $('cActual').value, nueva: $('cNueva').value }) });
+      token = r.token; sessionStorage.setItem('vtoken', token);
+      $('modalClave').classList.add('oculto'); $('formClave').reset();
+      toast('Clave actualizada ✓');
+      const { data } = await api('/panel'); pintar(data);
+    } catch (err) { $('claveError').textContent = err.message; }
+    $('btnGuardarClave').disabled = false;
+  });
+
+  /* ---------- Inicio ---------- */
+  if (token) cargar().catch(() => salir());
+})();
+</script>
+</body>
+</html>

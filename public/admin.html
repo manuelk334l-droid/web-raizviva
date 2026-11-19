@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin | RaízViva</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-salvia: #8ba888;
+    --verde-oscuro: #4a5d45;
+    --verde-claro: #d4e0d2;
+    --beige-claro: #f5f1e8;
+    --beige-medio: #e8dfd0;
+    --terracota: #c17b5c;
+    --texto-oscuro: #3a3a30;
+    --texto-suave: #6b6b5e;
+    --blanco-crema: #fdfbf7;
+    --rojo-suave: #d97c6e;
+    --amarillo-suave: #e6b862;
+    --azul-suave: #8b9fb8;
+    --sombra-suave: 0 10px 30px rgba(74, 93, 69, 0.08);
+    --sombra-hover: 0 20px 45px rgba(74, 93, 69, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; background: var(--beige-claro); color: var(--texto-oscuro); min-height: 100vh; line-height: 1.6; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--verde-oscuro); }
+
+  .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, var(--beige-claro) 0%, var(--beige-medio) 100%); padding: 2rem; position: relative; overflow: hidden; }
+  .login-screen::before { content: ''; position: absolute; top: -20%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(139, 168, 136, 0.25) 0%, transparent 70%); border-radius: 50%; animation: flotar 12s ease-in-out infinite; }
+  @keyframes flotar { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+  .login-box { background: var(--blanco-crema); padding: 3rem; border-radius: 28px; max-width: 420px; width: 100%; box-shadow: var(--sombra-hover); position: relative; z-index:
+2; text-align: center; }
+  .login-box .icono { width: 70px; height: 70px; background: linear-gradient(135deg, var(--verde-salvia), var(--terracota)); border-radius: 50% 40% 55% 45% / 50% 55% 45% 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1.5rem; animation: morphing 8s ease-in-out infinite; }
+  @keyframes morphing { 0%, 100% { border-radius: 50% 40% 55% 45% / 50% 55% 45% 50%; } 50% { border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%; } }
+  .login-box h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .login-box p { color: var(--texto-suave); font-size: 0.9rem; margin-bottom: 2rem; font-weight: 300; }
+  .login-box input { width: 100%; padding: 1rem 1.2rem; border: 1.5px solid var(--beige-medio); border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 1rem; background: var(--beige-claro); margin-bottom: 1rem; transition: all 0.3s ease; outline: none; text-align: center; letter-spacing: 2px; }
+  .login-box input:focus { border-color: var(--verde-salvia); background: var(--blanco-crema); box-shadow: 0 0 0 4px rgba(139, 168, 136, 0.12); }
+  .login-box button { width: 100%; padding: 1rem; background: var(--verde-oscuro); color: var(--blanco-crema); border: none; border-radius: 50px; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+  .login-box button:hover { background: var(--terracota); transform: translateY(-2px); box-shadow: var(--sombra-hover); }
+  .login-error { color: var(--terracota); font-size: 0.85rem; margin-top: 1rem; display: none; }
+  .login-error.visible { display: block; }
+
+  .dashboard { display: none; }
+  .dashboard.activo { display: block; }
+  .top-bar { background: var(--blanco-crema); padding: 1.2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(139, 168, 136, 0.15); position: sticky; top: 0; z-index: 100; box-shadow: var(--sombra-suave); }
+  .top-bar .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--verde-oscuro); }
+  .top-bar .logo span { color: var(--terracota); font-style: italic; }
+  .top-bar .acciones { display: flex; gap: 1rem; align-items: center; }
+  .btn-salir { background: transparent; border: 1.5px solid var(--verde-salvia); color: var(--verde-oscuro); padding: 0.6rem 1.3rem; border-radius: 50px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; }
+  .btn-salir:hover { background: var(--verde-salvia); color: var(--blanco-crema); }
+
+  .contenido { padding: 2.5rem; max-width: 1400px; margin: 0 auto; }
+  .titulo-pagina { margin-bottom: 2rem; }
+  .titulo-pagina h1 { font-size: 2.2rem; margin-bottom: 0.3rem; }
+  .titulo-pagina p { color: var(--texto-suave); font-weight: 300; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--blanco-crema); padding: 1.5rem 1.8rem; border-radius: 20px; box-shadow: var(--sombra-suave); position: relative; overflow: hidden; transition: all 0.3s ease; }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-hover); }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--verde-salvia); }
+  .stat-card.terracota::before { background: var(--terracota); }
+  .stat-card.amarillo::before { background: var(--amarillo-suave); }
+  .stat-card.azul::before { background: var(--azul-suave); }
+  .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--texto-suave); font-weight: 500; margin-bottom: 0.5rem; }
+  .stat-valor { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 700; color: var(--verde-oscuro); line-height: 1; }
+  .stat-icono { position: absolute; top: 1rem; right: 1.2rem; font-size: 1.8rem; opacity: 0.3; }
+
+  .barra-filtros { background: var(--blanco-crema); padding: 1.2rem 1.5rem; border-radius: 20px; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom:
+1.5rem; box-shadow: var(--sombra-suave); }
+  .buscar { flex: 1; min-width: 220px; position: relative; }
+  .buscar input { width: 100%; padding: 0.8rem 1rem 0.8rem 2.7rem; border: 1.5px solid var(--beige-medio); border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; background: var(--beige-claro); outline: none; transition: all 0.3s ease; }
+  .buscar input:focus { border-color: var(--verde-salvia); background: var(--blanco-crema); }
+  .buscar::before { content: '🔍'; position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5; }
+  .filtro-select { padding: 0.8rem 1rem; border: 1.5px solid var(--beige-medio); border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; background: var(--beige-claro); color: var(--texto-oscuro); cursor: pointer; outline: none; transition: all 0.3s ease; }
+  .filtro-select:focus { border-color: var(--verde-salvia); }
+  .btn-exportar { background: var(--verde-oscuro); color: var(--blanco-crema); padding: 0.8rem 1.4rem; border: none; border-radius: 50px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+  .btn-exportar:hover { background: var(--terracota); transform: translateY(-2px); }
+
+  .tabla-wrap { background: var(--blanco-crema); border-radius: 20px; overflow: hidden; box-shadow: var(--sombra-suave); }
+  .tabla { width: 100%; border-collapse: collapse; }
+  .tabla thead { background: var(--beige-claro); }
+  .tabla th { padding: 1rem 1.2rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-suave); font-weight: 600; font-family: 'Poppins', sans-serif; white-space: nowrap; }
+  .tabla tbody tr { border-bottom: 1px solid rgba(139, 168, 136, 0.1); transition: background 0.2s ease; cursor: pointer; }
+  .tabla tbody tr:hover { background: rgba(139, 168, 136, 0.06); }
+  .tabla td { padding: 1rem 1.2rem; font-size: 0.9rem; vertical-align: middle; }
+  .tabla .nombre { font-weight: 500; color: var(--verde-oscuro); }
+  .tabla .email { color: var(--texto-suave); font-size: 0.85rem; }
+
+  .badge { display: inline-block; padding: 0.35rem 0.9rem; border-radius: 50px; font-size: 0.75rem; font-weight: 500; text-transform: capitalize; letter-spacing: 0.3px; }
+  .badge-nuevo { background: rgba(139, 159, 184, 0.2); color: #5a6d87; }
+  .badge-contactado { background: rgba(230, 184, 98, 0.2); color: #a07a29; }
+  .badge-en-proceso { background: rgba(193, 123, 92, 0.2); color: #a3552f; }
+  .badge-activo { background: rgba(139, 168, 136, 0.25); color: var(--verde-oscuro); }
+  .badge-descartado { background: rgba(217, 124, 110, 0.2); color: #b15a4d; }
+
+  .acciones-fila { display: flex; gap: 0.5rem; justify-content: flex-end; }
+  .btn-icono { width: 34px; height: 34px; border-radius: 10px; border: none; background: var(--beige-claro); color: var(--texto-oscuro); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s ease; }
+  .btn-icono:hover { background: var(--verde-salvia); color: white; }
+  .btn-icono.eliminar:hover { background: var(--rojo-suave); }
+
+  .vacio { padding: 4rem 2rem; text-align: center; color: var(--texto-suave); }
+  .vacio .icono { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(58, 58, 48, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 2rem; z-index: 1000; animation: fadeIn 0.3s ease; }
+  .modal-overlay.activo { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal { background: var(--blanco-crema); border-radius: 24px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2.5rem; position: relative; animation: slideUp 0.4s ease; }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-cerrar { position: absolute; top: 1.2rem; right: 1.2rem; width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--beige-claro); cursor: pointer; font-size: 1.2rem; transition: all 0.2s ease; }
+  .modal-cerrar:hover { background: var(--terracota); color: white; }
+  .modal-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(139, 168, 136, 0.15); }
+  .modal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--verde-salvia), var(--terracota)); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.6rem; font-weight: 600; margin: 0 auto 1rem; font-family: 'Cormorant Garamond', serif; }
+  .modal-header h2 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+  .modal-header p { color: var(--texto-suave); font-size: 0.9rem; }
+  .modal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .info-item { background: var(--beige-claro); padding: 1rem; border-radius: 14px; }
+  .info-item .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-suave); font-weight: 600; margin-bottom: 0.3rem; }
+  .info-item .valor { font-size: 0.95rem; color: var(--texto-oscuro); font-weight: 500; word-break: break-word; }
+  .modal-seccion { margin-bottom: 1.5rem; }
+  .modal-seccion .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--texto-suave); font-weight: 600; margin-bottom: 0.6rem; display: bloc
+k; }
+  .modal-seccion textarea { width: 100%; padding: 1rem; border: 1.5px solid var(--beige-medio); border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; background: var(--beige-claro); resize: vertical; min-height: 80px; outline: none; transition: all 0.3s ease; }
+  .modal-seccion textarea:focus { border-color: var(--verde-salvia); background: var(--blanco-crema); }
+  .modal-seccion p { background: var(--beige-claro); padding: 1rem; border-radius: 14px; font-size: 0.9rem; color: var(--texto-suave); font-style: italic; }
+  .estado-botones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .estado-btn { padding: 0.5rem 1rem; border-radius: 50px; border: 1.5px solid var(--beige-medio); background: transparent; font-family: 'Poppins', sans-serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease; color: var(--texto-suave); }
+  .estado-btn:hover { border-color: var(--verde-salvia); }
+  .estado-btn.activo { background: var(--verde-oscuro); color: var(--blanco-crema); border-color: var(--verde-oscuro); }
+  .modal-acciones { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(139, 168, 136, 0.15); }
+  .modal-acciones button { flex: 1; padding: 0.9rem; border-radius: 50px; border: none; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+  .btn-guardar { background: var(--verde-oscuro); color: var(--blanco-crema); }
+  .btn-guardar:hover { background: var(--terracota); transform: translateY(-2px); }
+  .btn-eliminar-modal { background: transparent; color: var(--rojo-suave); border: 1.5px solid var(--rojo-suave); }
+  .btn-eliminar-modal:hover { background: var(--rojo-suave); color: white; }
+
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--verde-oscuro); color: var(--blanco-crema); padding: 1rem 1.5rem; border-radius: 14px; box-shadow: var(--sombra-hover); font-size: 0.9rem; transform: translateY(150%); transition: transform 0.4s ease; z-index: 2000; display: flex; align-items: center; gap: 0.7rem; max-width: 90vw; }
+  .toast.activo { transform: translateY(0); }
+  .toast.error { background: var(--rojo-suave); }
+
+  @media (max-width: 900px) {
+    .top-bar { padding: 1rem 1.5rem; }
+    .contenido { padding: 1.5rem; }
+    .barra-filtros { padding: 1rem; }
+    .tabla th:nth-child(4), .tabla td:nth-child(4), .tabla th:nth-child(5), .tabla td:nth-child(5) { display: none; }
+    .modal-info { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .tabla th:nth-child(3), .tabla td:nth-child(3) { display: none; }
+    .modal { padding: 1.5rem; }
+    .toast { left: 1rem; right: 1rem; bottom: 1rem; }
+  }
+  /* ============================================================
+     SECCIÓN ANALYTICS
+     ============================================================ */
+
+  .tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    background: var(--blanco-crema);
+    padding: 0.5rem;
+    border-radius: 50px;
+    box-shadow: var(--sombra-suave);
+    max-width: fit-content;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--texto-suave);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tab-btn:hover {
+    color: var(--verde-oscuro);
+  }
+
+  .tab-btn.activo {
+    background: var(--verde-oscuro);
+    color: var(--blanco-crema);
+    box-shadow: 0 4px 12px rgba(74, 93, 69, 0.3);
+  }
+
+  .vista {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .vista.activa {
+    display: block;
+  }
+
+  /* Selector de rango */
+  .rango-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .rango-btn {
+    padding: 0.55rem 1.2rem;
+    border-radius: 50px;
+    border: 1.5px solid var(--beige-medio);
+    background: var(--blanco-crema);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .rango-btn:hover {
+    border-color: var(--verde-salvia);
+    color: var(--verde-oscuro);
+  }
+
+  .rango-btn.activo {
+    background: var(--verde-oscuro);
+    color: var(--blanco-crema);
+    border-color: var(--verde-oscuro);
+  }
+
+  /* KPIs de analytics */
+  .kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .kpi-card {
+    background: var(--blanco-crema);
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: var(--sombra-suave);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-hover);
+  }
+
+  .kpi-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--texto-suave);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-valor {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-variacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.7rem;
+    border-radius: 50px;
+  }
+
+  .kpi-variacion.positiva {
+    background: rgba(139, 168, 136, 0.2);
+    color: var(--verde-oscuro);
+  }
+
+  .kpi-variacion.negativa {
+    background: rgba(217, 124, 110, 0.2);
+    color: #b15a4d;
+  }
+
+  .kpi-variacion.neutra {
+    background: var(--beige-medio);
+    color: var(--texto-suave);
+  }
+
+  /* Grid de gráficas */
+  .graficas-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .graficas-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grafica-card {
+    background: var(--blanco-crema);
+    padding: 1.8rem;
+    border-radius: 20px;
+    box-shadow: var(--sombra-suave);
+    position: relative;
+  }
+
+  .grafica-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .grafica-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--verde-oscuro);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .grafica-subtitulo {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    margin-top: 0.2rem;
+  }
+
+  .grafica-cuerpo {
+    position: relative;
+    height: 280px;
+  }
+
+  .grafica-cuerpo.chico {
+    height: 220px;
+  }
+
+  .grafica-cuerpo canvas {
+    max-height: 100%;
+  }
+
+  /* Loader de gráficas */
+  .grafica-loader {
+    position: absolute;
+    inset: 0;
+    background: rgba(253, 251, 247, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+  }
+
+  .grafica-loader::after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--beige-medio);
+    border-top-color: var(--verde-salvia);
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+  }
+
+  .grafica-loader.oculto {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes girar {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Embudo */
+  .embudo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .embudo-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .embudo-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--texto-oscuro);
+    font-weight: 500;
+  }
+
+  .embudo-nombre {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .embudo-barra {
+    height: 24px;
+    background: var(--beige-medio);
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .embudo-progreso {
+    height: 100%;
+    background: linear-gradient(90deg, var(--verde-salvia), var(--terracota));
+    border-radius: 50px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.8rem;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 35px;
+  }
+
+  .embudo-porcentaje {
+    font-size: 0.75rem;
+    color: var(--texto-suave);
+    font-weight: 500;
+  }
+
+  /* Mensaje vacío en gráficas */
+  .grafica-vacia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .grafica-vacia .icono {
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+
+  /* Aviso de módulo futuro */
+  .aviso-futuro {
+    background: linear-gradient(135deg, rgba(139, 168, 136, 0.1), rgba(193, 123, 92, 0.1));
+    border: 1.5px dashed var(--verde-salvia);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    color: var(--texto-suave);
+  }
+
+  .aviso-futuro h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 1100px) {
+    .graficas-grid,
+    .graficas-grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .tabs-nav {
+      width: 100%;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      white-space: nowrap;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+    }
+    .grafica-cuerpo {
+      height: 240px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="icono">🌿</div>
+    <h1>RaízViva</h1>
+    <p>Panel de administración</p>
+
+    <input type="password" id="claveInput" placeholder="Ingresa la clave de acceso" autocomplete="current-password">
+    <button id="btnLogin">Entrar al panel</button>
+
+    <p class="login-error" id="loginError">Clave incorrecta. Intenta nuevamente.</p>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="top-bar">
+    <div class="logo">Raíz<span>Viva</span> · Admin</div>
+    <div class="acciones">
+      <button class="btn-salir" id="btnSalir">Cerrar sesión</button>
+    </div>
+  </div>
+  <div class="contenido">
+
+    <!-- ===== TABS PRINCIPALES ===== -->
+    <div class="tabs-nav">
+      <button class="tab-btn activo" data-vista="registros">
+        📋 Registros
+      </button>
+      <button class="tab-btn" data-vista="analytics">
+        📊 Analytics
+      </button>
+    </div>
+    <!-- ==================== VISTA: REGISTROS ==================== -->
+    <div class="vista activa" id="vista-registros">
+      <div class="titulo-pagina">
+        <h1>Registros de vendedoras</h1>
+        <p>Gestiona el pipeline de captación y da seguimiento a cada candidata.</p>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-icono">👥</div>
+          <div class="stat-label">Total registros</div>
+          <div class="stat-valor" id="statTotal">0</div>
+        </div>
+        <div class="stat-card terracota">
+          <div class="stat-icono">🔥</div>
+          <div class="stat-label">Últimas 24h</div>
+          <div class="stat-valor" id="stat24h">0</div>
+        </div>
+        <div class="stat-card amarillo">
+          <div class="stat-icono">📅</div>
+          <div class="stat-label">Últimos 7 días</div>
+          <div class="stat-valor" id="stat7d">0</div>
+        </div>
+        <div class="stat-card azul">
+          <div class="stat-icono">✅</div>
+          <div class="stat-label">Activas</div>
+          <div class="stat-valor" id="statActivas">0</div>
+        </div>
+      </div>
+
+      <div class="barra-filtros">
+        <div class="buscar">
+          <input type="text" id="inputBuscar" placeholder="Buscar por nombre, email o ciudad...">
+        </div>
+        <select class="filtro-select" id="filtroEstado">
+          <option value="">Todos los estados</option>
+          <option value="nuevo">Nuevo</option>
+          <option value="contactado">Contactado</option>
+          <option value="en-proceso">En proceso</option>
+          <option value="activo">Activo</option>
+          <option value="descartado">Descartado</option>
+        </select>
+        <select class="filtro-select" id="filtroExperiencia">
+          <option value="">Toda experiencia</option>
+          <option value="Si">Con experiencia</option>
+          <option value="No">Sin experiencia</option>
+        </select>
+        <button class="btn-exportar" id="btnExportar">📥 Exportar CSV</button>
+      </div>
+
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Vendedora</th>
+              <th>Contacto</th>
+              <th>Ciudad</th>
+              <th>Edad</th>
+              <th>Experiencia</th>
+              <th>Estado</th>
+              <th style="text-align:right;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaBody"></tbody>
+        </table>
+        <div class="vacio" id="estadoVacio" style="display:none;">
+          <div class="icono">🌱</div>
+          <p>Aún no hay registros que coincidan con la búsqueda.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VISTA: ANALYTICS ==================== -->
+    <div class="vista" id="vista-analytics">
+      <div class="titulo-pagina">
+        <h1>Analytics</h1>
+        <p>Visualiza el crecimiento, el embudo de conversión y las tendencias de tu equipo.</p>
+      </div>
+
+      <!-- Selector de rango temporal -->
+      <div class="rango-selector">
+        <button class="rango-btn" data-rango="7d">Últimos 7 días</button>
+        <button class="rango-btn activo" data-rango="30d">Últimos 30 días</button>
+        <button class="rango-btn" data-rango="90d">Últimos 90 días</button>
+        <button class="rango-btn" data-rango="12m">Último año</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpis-grid" id="kpisGrid">
+        <div class="kpi-card">
+          <div class="kpi-label">Registros en el período</div>
+          <div class="kpi-valor" id="kpiRegistros">—</div>
+          <div class="kpi-variacion neutra" id="kpiRegistrosVar">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Activas</div>
+          <div class="kpi-valor" id="kpiActivas">—</div>
+          <div class="kpi-variacion neutra">en el período</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Emails enviados</div>
+          <div class="kpi-valor" id="kpiEmails">—</div>
+          <div class="kpi-variacion neutra">bienvenida</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">WhatsApp enviados</div>
+          <div class="kpi-valor" id="kpiWhatsapp">—</div>
+          <div class="kpi-variacion neutra">bienvenida</div>
+        </div>
+      </div>
+
+      <!-- Gráfica principal: registros en el tiempo -->
+      <div class="graficas-grid">
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Registros en el tiempo</h3>
+              <p class="grafica-subtitulo" id="subtituloSerie">Últimos 30 días</p>
+            </div>
+          </div>
+          <div class="grafica-cuerpo">
+            <div class="grafica-loader" id="loaderSerie"></div>
+            <canvas id="chartSerie"></canvas>
+          </div>
+        </div>
+
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Embudo de conversión</h3>
+              <p class="grafica-subtitulo">Del registro a activa</p>
+            </div>
+          </div>
+          <div class="embudo-list" id="embudoList">
+            <!-- Se llena con JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribuciones -->
+      <div class="graficas-grid-2">
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Estado del pipeline</h3>
+              <p class="grafica-subtitulo">Distribución actual</p>
+            </div>
+          </div>
+          <div class="grafica-cuerpo chico">
+            <canvas id="chartEstados"></canvas>
+          </div>
+        </div>
+
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Por ciudad</h3>
+              <p class="grafica-subtitulo">Top 10 ciudades</p>
+            </div>
+          </div>
+          <div class="grafica-cuerpo chico">
+            <canvas id="chartCiudades"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="graficas-grid-2">
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Por edad</h3>
+              <p class="grafica-subtitulo">Rangos etarios</p>
+            </div>
+          </div>
+          <div class="grafica-cuerpo chico">
+            <canvas id="chartEdades"></canvas>
+          </div>
+        </div>
+
+        <div class="grafica-card">
+          <div class="grafica-header">
+            <div>
+              <h3 class="grafica-titulo">Experiencia previa</h3>
+              <p class="grafica-subtitulo">Con o sin experiencia en ventas</p>
+            </div>
+          </div>
+          <div class="grafica-cuerpo chico">
+            <canvas id="chartExperiencia"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo futuro: pagos -->
+      <div class="grafica-card" style="margin-top: 1.5rem;">
+        <div class="grafica-header">
+          <div>
+            <h3 class="grafica-titulo">💰 Ingresos por pagos</h3>
+            <p class="grafica-subtitulo">Módulo en preparación</p>
+          </div>
+        </div>
+        <div class="aviso-futuro">
+          <h3>🚀 Próximamente</h3>
+          <p>Esta sección mostrará los ingresos, pagos por vendedora y comisiones generadas. La estructura ya está lista para conectarse a la tabla <code>pagos</code>.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-cerrar" id="btnCerrarModal">×</button>
+
+    <div class="modal-header">
+      <div class="modal-avatar" id="modalAvatar">MR</div>
+      <h2 id="modalNombre">Nombre completo</h2>
+      <p id="modalEmail">correo@ejemplo.com</p>
+    </div>
+
+    <div class="modal-info">
+      <div class="info-item">
+        <div class="label">WhatsApp</div>
+        <div class="valor" id="modalWhatsapp">-</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Ciudad</div>
+        <div class="valor" id="modalCiudad">-</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Edad</div>
+        <div class="valor" id="modalEdad">-</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Experiencia</div>
+        <div class="valor" id="modalExperiencia">-</div>
+      </div>
+    </div>
+
+    <div class="modal-seccion">
+      <span class="label">Motivación</span>
+      <p id="modalMotivacion">Sin información</p>
+    </div>
+
+    <div class="modal-seccion">
+      <span class="label">Estado</span>
+      <div class="estado-botones" id="estadoBotones">
+        <button class="estado-btn" data-estado="nuevo">Nuevo</button>
+        <button class="estado-btn" data-estado="contactado">Contactado</button>
+        <button class="estado-btn" data-estado="en-proceso">En proceso</button>
+        <button class="estado-btn" data-estado="activo">Activo</button>
+        <button class="estado-btn" data-estado="descartado">Descartado</button>
+      </div>
+    </div>
+
+    <div class="modal-seccion">
+      <span class="label">Notas internas</span>
+      <textarea id="modalNotas" placeholder="Agrega notas sobre el seguimiento..."></textarea>
+    </div>
+
+    <div class="modal-acciones">
+      <button class="btn-eliminar-modal" id="btnEliminar">Eliminar</button>
+      <button class="btn-guardar" id="btnGuardar">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">✓ Guardado</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  let CLAVE_ADMIN = sessionStorage.getItem('adminKey') || '';
+  let registros = [];
+  let registroActual = null;
+
+  const $ = id => document.getElementById(id);
+
+  function mostrarToast(mensaje, esError = false) {
+    const toast = $('toast');
+    toast.textContent = mensaje;
+    toast.className = 'toast activo' + (esError ? ' error' : '');
+    setTimeout(() => toast.classList.remove('activo'), 3000);
+  }
+
+  function formatearFecha(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function iniciales(nombre) {
+    return nombre.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+  }
+
+  $('btnLogin').addEventListener('click', intentarLogin);
+  $('claveInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') intentarLogin();
+  });
+
+  async function intentarLogin() {
+    const clave = $('claveInput').value.trim();
+    if (!clave) return;
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clave })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        CLAVE_ADMIN = clave;
+        sessionStorage.setItem('adminKey', clave);
+        entrarAlPanel();
+      } else {
+        $('loginError').classList.add('visible');
+      }
+    } catch (err) {
+      $('loginError').textContent = 'Error de conexión con el servidor.';
+      $('loginError').classList.add('visible');
+    }
+  }
+
+  function entrarAlPanel() {
+    $('loginScreen').style.display = 'none';
+    $('dashboard').classList.add('activo');
+    cargarDatos();
+  }
+
+  $('btnSalir').addEventListener('click', () => {
+    sessionStorage.removeItem('adminKey');
+    CLAVE_ADMIN = '';
+    location.reload();
+  });
+
+  if (CLAVE_ADMIN) {
+    fetch('/api/registros', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+      .then(r => r.ok ? entrarAlPanel() : sessionStorage.removeItem('adminKey'));
+  }
+
+  async function cargarDatos() {
+    try {
+      const [resRegistros, resStats] = await Promise.all([
+        fetch('/api/registros', { headers: { 'x-admin-key': CLAVE_ADMIN } }),
+        fetch('/api/estadisticas', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+      ]);
+
+      const dataRegistros = await resRegistros.json();
+      const dataStats = await resStats.json();
+
+      if (dataRegistros.ok) {
+        registros = dataRegistros.registros;
+        renderTabla();
+      }
+      if (dataStats.ok) {
+        $('statTotal').textContent = dataStats.total;
+        $('stat24h').textContent = dataStats.ultimas24h;
+        $('stat7d').textContent = dataStats.ultimos7;
+        $('statActivas').textContent = dataStats.porEstado?.activo || 0;
+      }
+    } catch (err) {
+      mostrarToast('Error al cargar datos', true);
+    }
+  }
+
+  function renderTabla() {
+    const buscar = $('inputBuscar').value.toLowerCase();
+    const filtroEstado = $('filtroEstado').value;
+    const filtroExp = $('filtroExperiencia').value;
+
+    const filtrados = registros.filter(r => {
+      const coincideBuscar = !buscar ||
+        r.nombre.toLowerCase().includes(buscar) ||
+        r.email.toLowerCase().includes(buscar) ||
+        r.ciudad.toLowerCase().includes(buscar);
+
+      const coincideEstado = !filtroEstado || r.estado === filtroEstado;
+      const coincideExp = !filtroExp || r.experiencia === filtroExp;
+
+      return coincideBuscar && coincideEstado && coincideExp;
+    });
+
+    const tbody = $('tablaBody');
+    const vacio = $('estadoVacio');
+
+    if (filtrados.length === 0) {
+      tbody.innerHTML = '';
+      vacio.style.display = 'block';
+      return;
+    }
+
+    vacio.style.display = 'none';
+    tbody.innerHTML = filtrados.map(r => `
+      <tr data-id="${r.id}">
+        <td>
+          <div class="nombre">${r.nombre}</div>
+          <div class="email">${formatearFecha(r.fecha)}</div>
+        </td>
+        <td>
+          <div class="email">${r.email}</div>
+          <div class="email">${r.whatsapp}</div>
+        </td>
+        <td>${r.ciudad}</td>
+        <td>${r.edad}</td>
+        <td>${r.experiencia === 'Si' ? 'Con experiencia' : 'Sin experiencia'}</td>
+        <td><span class="badge badge-${r.estado}">${r.estado.replace('-', ' ')}</span></td>
+        <td>
+          <div class="acciones-fila">
+            <button class="btn-icono ver" title="Ver detalle">👁</button>
+            <button class="btn-icono eliminar" data-eliminar="${r.id}" title="Eliminar">🗑</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    tbody.querySelectorAll('tr').forEach(tr => {
+      tr.addEventListener('click', (e) => {
+        if (e.target.closest('[data-eliminar]')) return;
+        abrirModal(tr.dataset.id);
+      });
+    });
+
+    tbody.querySelectorAll('[data-eliminar]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        eliminarRegistro(btn.dataset.eliminar);
+      });
+    });
+  }
+
+  function abrirModal(id) {
+    registroActual = registros.find(r => r.id === id);
+    if (!registroActual) return;
+
+    const r = registroActual;
+    $('modalAvatar').textContent = iniciales(r.nombre);
+    $('modalNombre').textContent = r.nombre;
+    $('modalEmail').textContent = r.email;
+    $('modalWhatsapp').textContent = r.whatsapp;
+    $('modalCiudad').textContent = r.ciudad;
+    $('modalEdad').textContent = r.edad;
+    $('modalExperiencia').textContent = r.experiencia === 'Si' ? 'Con experiencia' : 'Sin experiencia';
+    $('modalMotivacion').textContent = r.motivacion || 'Sin información';
+    $('modalNotas').value = r.notas || '';
+
+    actualizarBotonesEstado(r.estado);
+    $('modalOverlay').classList.add('activo');
+  }
+
+  function actualizarBotonesEstado(estadoActual) {
+    document.querySelectorAll('.estado-btn').forEach(btn => {
+      btn.classList.toggle('activo', btn.dataset.estado === estadoActual);
+    });
+  }
+
+  document.querySelectorAll('.estado-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.estado-btn').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+    });
+  });
+
+  $('btnCerrarModal').addEventListener('click', cerrarModal);
+  $('modalOverlay').addEventListener('click', (e) => {
+    if (e.target === $('modalOverlay')) cerrarModal();
+  });
+
+  function cerrarModal() {
+    $('modalOverlay').classList.remove('activo');
+    registroActual = null;
+  }
+
+  $('btnGuardar').addEventListener('click', async () => {
+    if (!registroActual) return;
+
+    const nuevoEstado = document.querySelector('.estado-btn.activo')?.dataset.estado;
+    const notas = $('modalNotas').value.trim();
+
+    try {
+      const res = await fetch(`/api/registros/${registroActual.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': CLAVE_ADMIN
+        },
+        body: JSON.stringify({ estado: nuevoEstado, notas })
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        mostrarToast('✓ Cambios guardados');
+        cerrarModal();
+        cargarDatos();
+      } else {
+        mostrarToast(data.mensaje || 'Error al guardar', true);
+      }
+    } catch {
+      mostrarToast('Error de conexión', true);
+    }
+  });
+
+  $('btnEliminar').addEventListener('click', () => {
+    if (!registroActual) return;
+    if (confirm(`¿Eliminar definitivamente a ${registroActual.nombre}?`)) {
+      eliminarRegistro(registroActual.id, true);
+    }
+  });
+
+  async function eliminarRegistro(id, cerrarModalDespues = false) {
+    if (!confirm('¿Estás segura de eliminar este registro?')) return;
+
+    try {
+      const res = await fetch(`/api/registros/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-key': CLAVE_ADMIN }
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        mostrarToast('Registro eliminado');
+        if (cerrarModalDespues) cerrarModal();
+        cargarDatos();
+      } else {
+        mostrarToast(data.mensaje || 'Error', true);
+      }
+    } catch {
+      mostrarToast('Error de conexión', true);
+    }
+  }
+
+  $('inputBuscar').addEventListener('input', renderTabla);
+  $('filtroEstado').addEventListener('change', renderTabla);
+  $('filtroExperiencia').addEventListener('change', renderTabla);
+
+  $('btnExportar').addEventListener('click', () => {
+    fetch('/api/exportar/csv', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+      .then(res => res.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `registros-raizviva-${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        mostrarToast('📥 CSV descargado');
+      })
+      .catch(() => mostrarToast('Error al exportar', true));
+  });
+
+  // ============================================================
+  // TABS — Registros / Analytics
+  // ============================================================
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+
+      document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+      document.getElementById(`vista-${btn.dataset.vista}`).classList.add('activa');
+
+      if (btn.dataset.vista === 'analytics') {
+        cargarAnalytics(rangoActual);
+      }
+    });
+  });
+
+  // ============================================================
+  // ANALYTICS
+  // ============================================================
+  let rangoActual = '30d';
+  let charts = {}; // Guarda referencias para destruir y recrear
+
+  const colores = {
+    verde: '#8ba888',
+    verdeOscuro: '#4a5d45',
+    terracota: '#c17b5c',
+    beige: '#e8dfd0',
+    amarillo: '#e6b862',
+    azul: '#8b9fb8',
+    rojo: '#d97c6e'
+  };
+  // Paleta para gráficas
+  const paleta = [
+    colores.verde,
+    colores.terracota,
+    colores.amarillo,
+    colores.azul,
+    colores.rojo,
+    '#a67c5b',
+    '#b8a78f',
+    '#7a8a6f',
+    '#d4b483',
+    '#9b8ba8'
+  ];
+
+  // Configuración global de Chart.js
+  Chart.defaults.font.family = "'Poppins', sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#6b6b5e';
+
+  function destruirCharts() {
+    Object.keys(charts).forEach(k => {
+      if (charts[k]) {
+        charts[k].destroy();
+        delete charts[k];
+      }
+    });
+  }
+
+  async function cargarAnalytics(rango = '30d') {
+    rangoActual = rango;
+
+    // Mostrar loaders
+    const loaderSerie = document.getElementById('loaderSerie');
+    if (loaderSerie) loaderSerie.classList.remove('oculto');
+
+    // Actualizar subtítulo
+    const subtitulos = {
+      '7d': 'Últimos 7 días',
+      '30d': 'Últimos 30 días',
+      '90d': 'Últimos 90 días',
+      '12m': 'Último año'
+    };
+    document.getElementById('subtituloSerie').textContent = subtitulos[rango] || 'Período';
+
+    try {
+      const res = await fetch(`/api/analytics/resumen?rango=${rango}`, {
+        headers: { 'x-admin-key': CLAVE_ADMIN }
+      });
+
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.mensaje || 'Error al cargar analytics');
+
+      const { data } = json;
+
+      renderKPIs(data.kpis);
+      renderEmbudo(data.embudo);
+      renderGraficaSerie(data.serie);
+      renderGraficaEstados(data.distribuciones.estados);
+      renderGraficaCiudades(data.distribuciones.ciudades);
+      renderGraficaEdades(data.distribuciones.edades);
+      renderGraficaExperiencia(data.distribuciones.experiencia);
+
+    } catch (err) {
+      console.error('❌ Error cargando analytics:', err);
+      mostrarToast('Error al cargar analytics: ' + err.message, true);
+    } finally {
+      if (loaderSerie) loaderSerie.classList.add('oculto');
+    }
+  }
+
+  function renderKPIs(kpis) {
+    document.getElementById('kpiRegistros').textContent = kpis.registros.actual;
+    document.getElementById('kpiActivas').textContent = kpis.activas;
+    document.getElementById('kpiEmails').textContent = kpis.emailsEnviados;
+    document.getElementById('kpiWhatsapp').textContent = kpis.whatsappEnviados;
+
+    const varEl = document.getElementById('kpiRegistrosVar');
+    const v = kpis.registros.variacion;
+    const signo = v > 0 ? '+' : '';
+    if (v > 0) {
+      varEl.className = 'kpi-variacion positiva';
+      varEl.textContent = `↑ ${signo}${v}% vs período anterior`;
+    } else if (v < 0) {
+      varEl.className = 'kpi-variacion negativa';
+      varEl.textContent = `↓ ${v}% vs período anterior`;
+    } else {
+      varEl.className = 'kpi-variacion neutra';
+      varEl.textContent = 'Sin cambios vs período anterior';
+    }
+  }
+
+  function renderEmbudo(embudo) {
+    const contenedor = document.getElementById('embudoList');
+    const total = embudo.pasos[0]?.valor || 0;
+
+    contenedor.innerHTML = embudo.pasos.map((paso, i) => {
+      const pct = total > 0 ? Math.round((paso.valor / total) * 100) : 0;
+      const ancho = Math.max(pct, 5); // mínimo 5% para que se vea algo
+      const iconos = ['🌱', '📞', '🔥', '✅'];
+      return `
+        <div class="embudo-item">
+          <div class="embudo-header">
+            <span class="embudo-nombre">${iconos[i]} ${paso.nombre}</span>
+            <span>${paso.valor} <span class="embudo-porcentaje">(${pct}%)</span></span>
+          </div>
+          <div class="embudo-barra">
+            <div class="embudo-progreso" style="width: ${ancho}%">
+              ${pct > 15 ? pct + '%' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderGraficaSerie(serie) {
+    const ctx = document.getElementById('chartSerie');
+    if (!ctx) return;
+
+    if (charts.serie) charts.serie.destroy();
+
+    // Gradiente para el área
+    const grad = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
+    grad.addColorStop(0, 'rgba(139, 168, 136, 0.4)');
+    grad.addColorStop(1, 'rgba(139, 168, 136, 0.02)');
+
+    charts.serie = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: serie.etiquetas,
+        datasets: [{
+          label: 'Registros',
+          data: serie.valores,
+          borderColor: colores.verdeOscuro,
+          backgroundColor: grad,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointHoverRadius: 7,
+          pointBackgroundColor: colores.verdeOscuro,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { intersect: false, mode: 'index' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colores.verdeOscuro,
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            padding: 12,
+            cornerRadius: 10,
+            displayColors: false,
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y} registro${ctx.parsed.y !== 1 ? 's' : ''}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              maxRotation: 0,
+              autoSkip: true,
+              maxTicksLimit: 10,
+              font: { size: 11 }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+            grid: { color: 'rgba(139, 168, 136, 0.1)' }
+          }
+        }
+      }
+    });
+  }
+
+  function renderGraficaEstados(data) {
+    const ctx = document.getElementById('chartEstados');
+    if (!ctx) return;
+    if (charts.estados) charts.estados.destroy();
+
+    const coloresEstado = data.etiquetas.map((_, i) => paleta[i % paleta.length]);
+
+    charts.estados = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: data.etiquetas.map(e => e.replace('-', ' ')),
+        datasets: [{
+          data: data.valores,
+          backgroundColor: coloresEstado,
+          borderColor: '#fdfbf7',
+          borderWidth: 3,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 12,
+              usePointStyle: true,
+              pointStyle: 'circle',
+              font: { size: 11 }
+            }
+          },
+          tooltip: {
+            backgroundColor: colores.verdeOscuro,
+            padding: 12,
+            cornerRadius: 10
+          }
+        }
+      }
+    });
+  }
+
+  function renderGraficaCiudades(data) {
+    const ctx = document.getElementById('chartCiudades');
+    if (!ctx) return;
+    if (charts.ciudades) charts.ciudades.destroy();
+
+    charts.ciudades = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.etiquetas,
+        datasets: [{
+          data: data.valores,
+          backgroundColor: colores.terracota,
+          borderRadius: 8,
+          borderSkipped: false,
+          barThickness: 'flex',
+          maxBarThickness: 28
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colores.verdeOscuro,
+            padding: 12,
+            cornerRadius: 10,
+            displayColors: false,
+            callbacks: {
+              label: (ctx) => `${ctx.parsed.y} registrada${ctx.parsed.y !== 1 ? 's' : ''}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 0 }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, precision: 0, font: { size: 10 } },
+            grid: { color: 'rgba(139, 168, 136, 0.1)' }
+          }
+        }
+      }
+    });
+  }
+
+  function renderGraficaEdades(data) {
+    const ctx = document.getElementById('chartEdades');
+    if (!ctx) return;
+    if (charts.edades) charts.edades.destroy();
+
+    charts.edades = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.etiquetas,
+        datasets: [{
+          data: data.valores,
+          backgroundColor: colores.amarillo,
+          borderRadius: 8,
+          borderSkipped: false,
+          maxBarThickness: 40
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colores.verdeOscuro,
+            padding: 12,
+            cornerRadius: 10,
+            displayColors: false
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+            grid: { color: 'rgba(139, 168, 136, 0.1)' }
+          }
+        }
+      }
+    });
+  }
+
+  function renderGraficaExperiencia(data) {
+    const ctx = document.getElementById('chartExperiencia');
+    if (!ctx) return;
+    if (charts.experiencia) charts.experiencia.destroy();
+
+    charts.experiencia = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: data.etiquetas,
+        datasets: [{
+          data: data.valores,
+          backgroundColor: [colores.verde, colores.terracota],
+          borderColor: '#fdfbf7',
+          borderWidth: 3,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 12,
+              usePointStyle: true,
+              pointStyle: 'circle',
+              font: { size: 12 }
+            }
+          },
+          tooltip: {
+            backgroundColor: colores.verdeOscuro,
+            padding: 12,
+            cornerRadius: 10
+          }
+        }
+      }
+    });
+  }
+
+  // Selector de rango temporal
+  document.querySelectorAll('.rango-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.rango-btn').forEach(b => b.classList.remove('activo'));      btn.classList.add('activo');
+      cargarAnalytics(btn.dataset.rango);
+    });
+  });
+</script>
+
+</body>
+</html>

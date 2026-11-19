@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Arial', sans-serif; background: #f5f1e8; margin: 0; padding: 20px; color: #3a3a30; }
+  .wrap { max-width: 600px; margin: 0 auto; background: #fdfbf7; border-radius: 12px; overflow: hidden; }
+  .header { background: #4a5d45; padding: 25px 30px; }
+  .header h1 { color: #fdfbf7; font-size: 20px; margin: 0; font-weight: 400; }
+  .contenido { padding: 30px; }
+  .dato { padding: 12px 0; border-bottom: 1px solid #e8dfd0; }
+  .dato:last-child { border-bottom: none; }
+  .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #8ba888; font-weight: bold; }
+  .valor { font-size: 15px; color: #3a3a30; margin-top: 4px; }
+  .motivacion { background: #f5f1e8; padding: 18px; border-radius: 8px; margin: 20px 0; font-style: italic; color: #6b6b5e; }
+  .boton { display: inline-block; background: #c17b5c; color: white; padding: 12px 28px; border-radius: 50px; text-decoration: none; font-size: 13px; letter-spacing: 1px; margin-top: 15px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>🌸 Nueva vendedora registrada</h1>
+    </div>
+    <div class="contenido">
+      <div class="dato"><div class="label">Nombre</div><div class="valor">{{nombre}}</div></div>
+      <div class="dato"><div class="label">Email</div><div class="valor">{{email}}</div>
+</div>
+      <div class="dato"><div class="label">WhatsApp</div><div class="valor">{{whatsapp}}
+</div></div>
+      <div class="dato"><div class="label">Ciudad</div><div class="valor">{{ciudad}}</div></div>
+      <div class="dato"><div class="label">Edad</div><div class="valor">{{edad}}</div></div>
+      <div class="dato"><div class="label">Experiencia</div><div class="valor">{{experiencia}}</div></div>
+      <div class="dato"><div class="label">Fecha</div><div class="valor">{{fecha}}</div>
+</div>
+
+      <div class="motivacion">
+        <strong>Motivación:</strong> {{motivacion}}
+      </div>
+
+      <p style="text-align: center;">
+        <a href="{{adminUrl}}" class="boton">Ver en el panel →</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

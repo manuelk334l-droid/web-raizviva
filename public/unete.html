@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Únete al Equipo | RaízViva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-salvia: #8ba888;
+    --verde-oscuro: #4a5d45;
+    --beige-claro: #f5f1e8;
+    --beige-medio: #e8dfd0;
+    --terracota: #c17b5c;
+    --texto-oscuro: #3a3a30;
+    --texto-suave: #6b6b5e;
+    --blanco-crema: #fdfbf7;
+    --sombra-suave: 0 10px 30px rgba(74, 93, 69, 0.08);
+    --sombra-hover: 0 20px 45px rgba(74, 93, 69, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, var(--beige-claro) 0%, var(--beige-medio) 100%); color: var(--texto-oscuro); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top: -20%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(139, 168, 136, 0.2) 0%, transparent 70%); border-radius: 50%; animation: flotar 12s ease-in-out infinite; z-index: 0; }
+  body::after { content: ''; position: fixed; bottom: -20%; left: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(193, 123, 92, 0.15) 0%, transparent 70%); border-radius: 50%; animation: flotar 10s ease-in-out infinite reverse; z-index: 0; }
+  @keyframes flotar { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--verde-oscuro); font-weight: 600; }
+
+  .contenedor-form { background: var(--blanco-crema); border-radius: 32px; padding: 3.5rem; max-width: 620px; width: 100%; box-shadow: var(--sombra-hover); position: relative; z-index: 2; border: 1px solid rgba(139, 168, 136, 0.15); }
+  .logo-volver { display: inline-block; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde-oscuro); text-decoration: none; margin-bottom: 1.5rem; font-weight: 700; }
+  .logo-volver span { color: var(--terracota); font-style: italic; }
+  .header-form { text-align: center; margin-bottom: 2.5rem; }
+  .header-form .etiqueta { display: inline-block; background: rgba(139, 168, 136, 0.2); color: var(--verde-oscuro); padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; font-weight: 500; }
+  .header-form h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 0.5rem; }
+  .header-form p { color: var(--texto-suave); font-size: 0.95rem; font-weight: 300; }
+
+  .progreso { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3rem; position: relative; }
+  .progreso::before { content: ''; position: absolute; top: 18px; left: 10%; right: 10%; height: 2px; background: var(--beige-medio); z-index: 0; }
+  .progreso-barra { position: absolute; top: 18px; left: 10%; height: 2px; background: linear-gradient(90deg, var(--verde-salvia), var(--terracota)); z-index: 1; transition: width 0.5s ease; width: 0%; }
+  .paso { display: flex; flex-direction: column; align-items: center; z-index: 2; position: relative; flex: 1; }
+  .paso-num { width: 38px; height: 38px; border-radius: 50%; background: var(--beige-medio); color: var(--texto-suave); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 0.9rem; transition: all 0.4s ease; margin-bottom: 0.5rem; }
+  .paso.activo .paso-num { background: var(--verde-oscuro); color: var(--blanco-crema); transform: scale(1.1); box-shadow: 0 5px 15px rgba(74, 93, 69, 0.3); }
+  .paso.completado .paso-num { background: var(--verde-salvia); color: var(--blanco-crema); }
+  .paso-label { font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--texto-suave); font-weight: 500; }
+  .paso.activo .paso-label { color: var(--verde-oscuro); }
+
+  .form-paso { display: none; animation: fadeIn 0.5s ease; }
+  .form-paso.activo { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  .campo { margin-bottom: 1.5rem; }
+  .campo label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--texto-oscuro); margin-bottom: 0.5rem; letter-spacing: 0.3px; }
+  .campo input, .campo select, .campo textarea { width: 100%; padding: 0.95rem 1.2rem; border: 1.5px solid var(--beige-medio); border-radius: 14px; background: var(--beige-clar
+o); font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: var(--texto-oscuro); transition: all 0.3s ease; outline: none; }
+  .campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--verde-salvia); background: var(--blanco-crema); box-shadow: 0 0 0 4px rgba(139, 168, 136,
+0.12); }
+  .campo input.error, .campo select.error { border-color: var(--terracota); background: rgba(193, 123, 92, 0.05); }
+  .error-msg { color: var(--terracota); font-size: 0.8rem; margin-top: 0.4rem; display: none; }
+  .error-msg.visible { display: block; }
+
+  .radio-grupo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.3rem; }
+  .radio-opcion { position: relative; cursor: pointer; }
+  .radio-opcion input { position: absolute; opacity: 0; }
+  .radio-opcion span { display: block; padding: 0.85rem 1rem; background: var(--beige-claro); border: 1.5px solid var(--beige-medio); border-radius: 14px; text-align: center; font-size: 0.9rem; transition: all 0.3s ease; color: var(--texto-suave); }
+  .radio-opcion input:checked + span { background: var(--verde-oscuro); color: var(--blanco-crema); border-color: var(--verde-oscuro); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(74, 93, 69, 0.2); }
+  .radio-opcion:hover span { border-color: var(--verde-salvia); }
+
+  .nav-botones { display: flex; gap: 1rem; margin-top: 2.5rem; }
+  .btn { padding: 1rem 2rem; border-radius: 50px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.3s ease; flex: 1; }
+  .btn-siguiente { background: var(--verde-oscuro); color: var(--blanco-crema); }
+  .btn-siguiente:hover { background: var(--terracota); transform: translateY(-3px); box-shadow: var(--sombra-hover); }
+  .btn-atras { background: transparent; color: var(--verde-oscuro); border: 1.5px solid var(--verde-salvia); }
+  .btn-atras:hover { background: var(--verde-salvia); color: var(--blanco-crema); }
+
+  .checkbox-terminos { display: flex; gap: 0.8rem; align-items: flex-start; font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 1rem; line-height: 1.5; }
+  .checkbox-terminos input { width: 18px; height: 18px; accent-color: var(--verde-oscuro); margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+  .checkbox-terminos a { color: var(--terracota); text-decoration: underline; }
+
+  .exito { display: none; text-align: center; padding: 2rem 1rem; }
+  .exito.activo { display: block; }
+  .exito .icono { width: 90px; height: 90px; background: linear-gradient(135deg, var(--verde-salvia), var(--terracota)); border-radius: 50% 40% 55% 45% / 50% 55% 45% 50%; displa
+y: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem; color: white; animation: morphing 6s ease-in-out infinite; }
+  @keyframes morphing { 0%, 100% { border-radius: 50% 40% 55% 45% / 50% 55% 45% 50%; } 50% { border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%; } }
+  .exito h2 { font-size: 2rem; margin-bottom: 0.8rem; }
+  .exito p { color: var(--texto-suave); font-weight: 300; margin-bottom: 1.5rem; }
+
+  .loader { display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: girar 0.8s linear infinite; margin: 0 auto; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    .contenedor-form { padding: 2rem 1.5rem; border-radius: 24px; }
+    .radio-grupo { grid-template-columns: 1fr; }
+    .paso-label { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="contenedor-form">
+  <a href="index.html" class="logo-volver">Raíz<span>Viva</span></a>
+
+  <div id="formulario-wrapper">
+    <div class="header-form">
+      <span class="etiqueta">✦ Únete al equipo</span>
+      <h1>Empecemos tu camino</h1>
+      <p>Solo toma 2 minutos. Sin compromiso.</p>
+    </div>
+
+    <div class="progreso">
+      <div class="progreso-barra" id="progresoBarra"></div>
+      <div class="paso activo" data-paso="1">
+        <div class="paso-num">1</div>
+        <div class="paso-label">Datos</div>
+      </div>
+      <div class="paso" data-paso="2">
+        <div class="paso-num">2</div>
+        <div class="paso-label">Perfil</div>
+      </div>
+      <div class="paso" data-paso="3">
+        <div class="paso-num">3</div>
+        <div class="paso-label">Confirmar</div>
+      </div>
+    </div>
+
+    <form id="formRegistro" novalidate>
+
+      <div class="form-paso activo" data-paso="1">
+        <div class="campo">
+          <label for="nombre">Nombre completo *</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej: María Fernanda López" required>
+          <span class="error-msg">Por favor ingresa tu nombre</span>
+        </div>
+
+        <div class="campo">
+          <label for="email">Correo electrónico *</label>
+          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+          <span class="error-msg">Ingresa un correo válido</span>
+        </div>
+
+        <div class="campo">
+          <label for="whatsapp">WhatsApp *</label>
+          <input type="tel" id="whatsapp" name="whatsapp" placeholder="+57 300 000 0000" required>
+          <span class="error-msg">Ingresa un número válido</span>
+        </div>
+
+        <div class="nav-botones">
+          <button type="button" class="btn btn-siguiente" data-siguiente>Continuar →</button>
+        </div>
+      </div>
+
+      <div class="form-paso" data-paso="2">
+        <div class="campo">
+          <label for="ciudad">Ciudad *</label>
+          <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Bogotá" required>          <span class="error-msg">Ingresa tu ciudad</span>
+        </div>
+
+        <div class="campo">
+          <label for="edad">Edad *</label>
+          <select id="edad" name="edad" required>
+            <option value="">Selecciona tu edad</option>
+            <option value="18-24">18 a 24 años</option>
+            <option value="25-34">25 a 34 años</option>
+            <option value="35-44">35 a 44 años</option>
+            <option value="45+">45 años o más</option>
+          </select>
+          <span class="error-msg">Selecciona un rango</span>
+        </div>
+
+        <div class="campo">
+          <label>¿Tienes experiencia en ventas? *</label>
+          <div class="radio-grupo">
+            <label class="radio-opcion">
+              <input type="radio" name="experiencia" value="Si" required>
+              <span>Sí, tengo experiencia</span>
+            </label>
+            <label class="radio-opcion">
+              <input type="radio" name="experiencia" value="No" required>
+              <span>No, pero quiero aprender</span>
+            </label>
+          </div>
+          <span class="error-msg">Selecciona una opción</span>
+        </div>
+
+        <div class="campo">
+          <label for="motivacion">¿Qué te motiva a unirte? (opcional)</label>
+          <textarea id="motivacion" name="motivacion" rows="3" placeholder="Cuéntanos brevemente..."></textarea>
+        </div>
+
+        <div class="nav-botones">
+          <button type="button" class="btn btn-atras" data-atras>← Atrás</button>
+          <button type="button" class="btn btn-siguiente" data-siguiente>Continuar →</button>
+        </div>
+      </div>
+
+      <div class="form-paso" data-paso="3">
+        <div class="campo">
+          <label>Confirma tus datos</label>
+          <div id="resumen" style="background: var(--beige-claro); border-radius: 14px; padding: 1.2rem; font-size: 0.9rem; line-height: 1.8; color: var(--texto-suave);"></div>
+        </div>
+        <label class="checkbox-terminos">
+          <input type="checkbox" id="terminos" required>
+          <span>Acepto ser contactada por RaízViva y acepto la <a href="#">política de privacidad</a>. *</span>
+        </label>
+        <span class="error-msg" id="errorTerminos">Debes aceptar los términos</span>
+
+        <div class="nav-botones">
+          <button type="button" class="btn btn-atras" data-atras>← Atrás</button>
+          <button type="submit" class="btn btn-siguiente" id="btnEnviar">
+            <span class="btn-texto">Enviar registro ✓</span>
+            <div class="loader"></div>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="exito" id="pantallaExito">
+    <div class="icono">🌿</div>
+    <h2>¡Bienvenida a RaízViva!</h2>
+    <p>Tu registro fue enviado con éxito. Muy pronto una de nuestras líderes se pondrá en contacto contigo por WhatsApp.</p>
+    <p style="font-size: 0.85rem; opacity: 0.7;">Mientras tanto, síguenos en nuestras redes 💚</p>
+  </div>
+
+</div>
+
+<script>
+  const pasos = document.querySelectorAll('.form-paso');
+  const indicadores = document.querySelectorAll('.paso');
+  const barra = document.getElementById('progresoBarra');
+  let pasoActual = 1;
+
+  function actualizarProgreso() {
+    const porcentaje = ((pasoActual - 1) / (pasos.length - 1)) * 80;
+    barra.style.width = porcentaje + '%';
+
+    indicadores.forEach((ind, i) => {
+      ind.classList.remove('activo', 'completado');
+      if (i + 1 === pasoActual) ind.classList.add('activo');
+      else if (i + 1 < pasoActual) ind.classList.add('completado');
+    });
+  }
+
+  function mostrarPaso(n) {
+    pasos.forEach(p => p.classList.remove('activo'));
+    document.querySelector(`.form-paso[data-paso="${n}"]`).classList.add('activo');
+    pasoActual = n;
+    actualizarProgreso();
+    if (n === 3) generarResumen();
+  }
+
+  function validarPaso(n) {
+    let valido = true;
+    const paso = document.querySelector(`.form-paso[data-paso="${n}"]`);
+    const inputs = paso.querySelectorAll('input[required], select[required]');
+
+    inputs.forEach(input => {
+      const error = input.closest('.campo')?.querySelector('.error-msg')
+                 || input.closest('.campo')?.parentElement.querySelector('.error-msg');
+
+      if (input.type === 'radio') {
+        const radios = paso.querySelectorAll(`input[name="${input.name}"]`);
+        const seleccionado = [...radios].some(r => r.checked);
+        if (!seleccionado) {
+          valido = false;
+          const msg = input.closest('.campo').querySelector('.error-msg');
+          if (msg) msg.classList.add('visible');
+        } else {
+          const msg = input.closest('.campo').querySelector('.error-msg');
+          if (msg) msg.classList.remove('visible');
+        }
+        return;
+      }
+
+      if (!input.value.trim() || (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(input.value))) {
+        valido = false;
+        input.classList.add('error');
+        if (error) error.classList.add('visible');
+      } else {
+        input.classList.remove('error');
+        if (error) error.classList.remove('visible');
+      }
+    });
+    return valido;
+  }
+
+  document.querySelectorAll('[data-siguiente]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (validarPaso(pasoActual)) mostrarPaso(pasoActual + 1);
+    });
+  });
+
+  document.querySelectorAll('[data-atras]').forEach(btn => {
+    btn.addEventListener('click', () => mostrarPaso(pasoActual - 1));
+  });
+
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      const err = el.closest('.campo')?.querySelector('.error-msg');
+      if (err) err.classList.remove('visible');
+    });
+  });
+
+  function generarResumen() {
+    const datos = new FormData(document.getElementById('formRegistro'));
+    const resumen = document.getElementById('resumen');
+    resumen.innerHTML = `
+      <strong>Nombre:</strong> ${datos.get('nombre')}<br>
+      <strong>Correo:</strong> ${datos.get('email')}<br>
+      <strong>WhatsApp:</strong> ${datos.get('whatsapp')}<br>
+      <strong>Ciudad:</strong> ${datos.get('ciudad')}<br>
+      <strong>Edad:</strong> ${datos.get('edad')}<br>
+      <strong>Experiencia:</strong> ${datos.get('experiencia')}<br>
+      ${datos.get('motivacion') ? `<strong>Motivación:</strong> ${datos.get('motivacion')}` : ''}
+    `;
+  }
+
+  document.getElementById('formRegistro').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const terminos = document.getElementById('terminos');
+    const errorTerminos = document.getElementById('errorTerminos');
+    if (!terminos.checked) {
+      errorTerminos.classList.add('visible');
+      return;
+    }
+    errorTerminos.classList.remove('visible');
+
+    const btn = document.getElementById('btnEnviar');
+    const texto = btn.querySelector('.btn-texto');
+    const loader = btn.querySelector('.loader');
+
+    texto.style.display = 'none';
+    loader.style.display = 'block';
+    btn.disabled = true;
+
+    const datos = Object.fromEntries(new FormData(e.target).entries());
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) datos.ref = ref; // link de una vendedora
+
+    try {
+      const respuesta = await fetch('/api/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+
+      const resultado = await respuesta.json();
+
+      if (!respuesta.ok) throw new Error(resultado.mensaje || 'Error al enviar');
+
+      document.getElementById('formulario-wrapper').style.display = 'none';
+      document.getElementById('pantallaExito').classList.add('activo');
+
+    } catch (err) {
+      alert('Hubo un problema: ' + err.message);
+      texto.style.display = 'inline';
+      loader.style.display = 'none';
+      btn.disabled = false;
+    }
+  });
+
+  actualizarProgreso();
+</script>
+
+</body>
+</html>

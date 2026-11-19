@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Únete al Equipo | Líder de Ventas Natural</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-salvia: #8ba888;
+    --verde-oscuro: #4a5d45;
+    --beige-claro: #f5f1e8;
+    --beige-medio: #e8dfd0;
+    --terracota: #c17b5c;
+    --tierra: #a67c5b;
+    --texto-oscuro: #3a3a30;
+    --texto-suave: #6b6b5e;
+    --blanco-crema: #fdfbf7;
+    --sombra-suave: 0 10px 30px rgba(74, 93, 69, 0.08);
+    --sombra-hover: 0 20px 45px rgba(74, 93, 69, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Poppins', sans-serif; background-color: var(--beige-claro); color: var(--texto-oscuro); line-height: 1.7; overflow-x: hidden; }
+  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 600; line-height: 1.2; color: var(--verde-oscuro); }
+
+  nav { position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(245, 241, 232, 0.85); backdrop-filter: blur(12px); z-index: 1000; transition: all 0.3s ease; border-bottom: 1px solid rgba(139, 168, 136, 0.15); }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--verde-oscuro); letter-spacing: 1px; }
+  .logo span { color: var(--terracota); font-style: italic; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--texto-oscuro); font-size: 0.9rem; font-weight: 400; letter-spacing: 0.5px; transition: color 0.3s ease; position: relative; }  .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 1.5px; background: var(--terracota); transition: width 0.3s ease; }
+  .nav-links a:hover { color: var(--terracota); }
+  .nav-links a:hover::after { width: 100%; }
+  .btn-nav { background: var(--verde-oscuro); color: var(--beige-claro) !important; padding: 0.7rem 1.8rem; border-radius: 50px; font-size: 0.85rem !important; transition: all 0.3s ease; }
+  .btn-nav:hover { background: var(--terracota); transform: translateY(-2px); box-shadow: var(--sombra-hover); }
+  .btn-nav::after { display: none; }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 5% 4rem; position: relative; background: linear-gradient(135deg, var(--beige-claro) 0%, var(--beige-medio) 100%); overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(139, 168, 136, 0.25) 0%, transparent 70%); border-radius: 50%; animation: flotar 8s ease-in-out infinite; }
+  .hero::after { content: ''; position: absolute; bottom: -15%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(193, 123, 92, 0.15) 0%, transparent 70%); border-radius: 50%; animation: flotar 10s ease-in-out infinite reverse; }
+  @keyframes flotar { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -30px) scale(1.05); } }
+  .hero-contenido { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; max-width: 1300px; margin: 0 auto; width: 100%; position: relative; z-inde
+x: 2; }
+  .hero-texto .etiqueta { display: inline-block; background: rgba(139, 168, 136, 0.2); color: var(--verde-oscuro); padding: 0.5rem 1.3rem; border-radius: 50px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; font-weight: 500; }
+  .hero-texto h1 { font-size: clamp(2.8rem, 5.5vw, 4.5rem); margin-bottom: 1.5rem; font-weight: 700; }
+  .hero-texto h1 em { color: var(--terracota); font-style: italic; font-weight: 500; }
+  .hero-texto p { font-size: 1.1rem; color: var(--texto-suave); margin-bottom: 2.5rem; max-width: 500px; font-weight: 300; }
+  .hero-botones { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primario { background: var(--verde-oscuro); color: var(--beige-claro); padding: 1rem 2.5rem; border-radius: 50px; text-decoration: none; font-weight: 500; font-size: 0.95rem; letter-spacing: 0.5px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.6rem; border: none; cursor: pointer; }
+  .btn-primario:hover { background: var(--terracota); transform: translateY(-3px); box-shadow: var(--sombra-hover); }
+  .btn-secundario { background: transparent; color: var(--verde-oscuro); padding: 1rem 2.5rem; border-radius: 50px; text-decoration: none; font-weight: 500; font-size: 0.95rem; border: 1.5px solid var(--verde-salvia); transition: all 0.3s ease; display: inline-flex; align-items: center; }
+  .btn-secundario:hover { background: var(--verde-salvia); color: var(--blanco-crema); transform: translateY(-3px); }
+
+  .hero-imagen { position: relative; display: flex; justify-content: center; align-items: center; }
+  .marco-organico { width: 100%; max-width: 450px; aspect-ratio: 4/5; background: linear-gradient(135deg, var(--verde-salvia), var(--terracota)); border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%; position: relative; overflow: hidden; box-shadow: var(--sombra-hover); animation: morphing 12s ease-in-out infinite; }
+  @keyframes morphing { 0%, 100% { border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%; } 50% { border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%; } }
+  .marco-organico img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: luminosity; opacity: 0.9; }
+  .marco-organico .placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 5rem; color: rgba(255,255,255,0.7); }
+  .hoja { position: absolute; font-size: 2.5rem; opacity: 0.6; animation: flotar 6s ease-in-out infinite; }
+  .hoja-1 { top: 5%; left: -5%; animation-delay: 0s; }
+  .hoja-2 { bottom: 10%; right: -8%; animation-delay: 2s; }
+
+  .beneficios { padding: 7rem 5%; background: var(--blanco-crema); position: relative; }
+  .seccion-header { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+  .seccion-header .subtitulo { color: var(--terracota); font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-bottom: 1rem; display: block; }
+  .seccion-header h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+  .seccion-header p { color: var(--texto-suave); font-weight: 300; font-size: 1.05rem; }
+  .grid-beneficios { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+  .tarjeta-beneficio { background: var(--beige-claro); padding: 2.5rem 2rem; border-radius: 24px; transition: all 0.4s ease; border: 1px solid transparent; position: relative; overflow: hidden; }
+  .tarjeta-beneficio::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--verde-salvia), var(--terracot
+a)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+  .tarjeta-beneficio:hover { transform: translateY(-8px); box-shadow: var(--sombra-hover); border-color: rgba(139, 168, 136, 0.3); }
+  .tarjeta-beneficio:hover::before { transform: scaleX(1); }
+  .icono-beneficio { width: 60px; height: 60px; background: rgba(139, 168, 136, 0.15); border-radius: 50% 40% 55% 45% / 50% 55% 45% 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.5rem; }
+  .tarjeta-beneficio h3 { font-size: 1.4rem; margin-bottom: 0.8rem; font-weight: 600; }
+  .tarjeta-beneficio p { color: var(--texto-suave); font-size: 0.95rem; font-weight: 300; line-height: 1.7; }
+
+  .cta-final { padding: 7rem 5%; background: linear-gradient(135deg, var(--verde-oscuro) 0%, #3d4d39 100%); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: -50%; left: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(139, 168, 136, 0.3) 0%, transparent 70%); border-radius: 50%; }
+  .cta-final::after { content: ''; position: absolute; bottom: -40%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(193, 123, 92, 0.25) 0%, transparent 70%); border-radius: 50%; }
+  .cta-contenido { position: relative; z-index: 2; max-width: 750px; margin: 0 auto; }
+  .cta-contenido h2 { color: var(--beige-claro); font-size: clamp(2rem, 4.5vw, 3.2rem); margin-bottom: 1.5rem; }
+  .cta-contenido h2 em { color: var(--terracota); font-style: italic; }
+  .cta-contenido p { color: rgba(245, 241, 232, 0.8); font-size: 1.1rem; font-weight: 300; margin-bottom: 2.5rem; }
+  .btn-claro { background: var(--beige-claro); color: var(--verde-oscuro); padding: 1.1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 500; font-size: 1rem; transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
+  .btn-claro:hover { background: var(--terracota); color: var(--beige-claro); transform: translateY(-3px); box-shadow: 0 15px 35px rgba(193, 123, 92, 0.4); }
+
+  footer { background: var(--beige-medio); padding: 3rem 5% 2rem; text-align: center; color: var(--texto-suave); font-size: 0.85rem; font-weight: 300; }
+  footer .logo { margin-bottom: 1rem; font-size: 1.4rem; }
+  .redes { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
+  .redes a { color: var(--verde-oscuro); text-decoration: none; font-size: 0.85rem; transition: color 0.3s ease; }
+  .redes a:hover { color: var(--terracota); }
+
+  @media (max-width: 900px) {
+    .hero-contenido { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+    .hero-texto p { margin-left: auto; margin-right: auto; }
+    .hero-botones { justify-content: center; }
+    .hero-imagen { order: -1; }
+    .marco-organico { max-width: 320px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 500px) {
+    .hero { padding: 7rem 5% 3rem; }
+    .beneficios, .cta-final { padding: 5rem 5%; }
+    .btn-primario, .btn-secundario { padding: 0.9rem 1.8rem; font-size: 0.9rem; width: 100%; justify-content: center; }
+    .hero-botones { flex-direction: column; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Raíz<span>Viva</span></div>
+    <ul class="nav-links">
+      <li><a href="#beneficios">Beneficios</a></li>
+      <li><a href="#unete">Únete ahora</a></li>
+      <li><a href="unete.html" class="btn-nav">Quiero unirme</a></li>
+    </ul>
+  </nav>
+  <section class="hero">
+    <div class="hero-contenido">
+      <div class="hero-texto">
+        <span class="etiqueta">✦ Sé tu propia líder</span>
+        <h1>Crece con propósito, <em>vende con alma</em></h1>
+        <p>Únete a un equipo de mujeres que transforman su pasión en libertad. Sin horarios rígidos, con acompañamiento real y una comunidad que te impulsa a brillar.</p>
+        <div class="hero-botones">
+          <a href="unete.html" class="btn-primario">Quiero ser parte →</a>
+          <a href="#beneficios" class="btn-secundario">Conoce más</a>
+        </div>
+      </div>
+
+      <div class="hero-imagen">
+        <div class="marco-organico">
+          <div class="placeholder">🌿</div>
+        </div>
+        <span class="hoja hoja-1">🍃</span>
+        <span class="hoja hoja-2">🌾</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="beneficios" id="beneficios">
+    <div class="seccion-header">
+      <span class="subtitulo">Por qué unirte</span>
+      <h2>Un camino hecho para ti</h2>
+      <p>Diseñamos cada detalle para que puedas crecer a tu ritmo, con herramientas reales y una red de mujeres que se apoyan.</p>
+    </div>
+
+    <div class="grid-beneficios">
+      <div class="tarjeta-beneficio">
+        <div class="icono-beneficio">🌱</div>
+        <h3>Ingresos sin límites</h3>
+        <p>Tú decides cuánto quieres ganar. Comisiones claras, bonos por metas y reconocimiento real a tu esfuerzo.</p>
+      </div>
+
+      <div class="tarjeta-beneficio">
+        <div class="icono-beneficio">🕊</div>
+        <h3>Libertad de horarios</h3>
+        <p>Organiza tu día como quieras. Trabaja desde casa, desde donde estés, con total flexibilidad.</p>
+      </div>
+
+      <div class="tarjeta-beneficio">
+        <div class="icono-beneficio">🌸</div>
+        <h3>Comunidad femenina</h3>
+        <p>Rodéate de mujeres que te inspiran, te apoyan y celebran tus logros como si fueran suyos.</p>
+      </div>
+
+      <div class="tarjeta-beneficio">
+        <div class="icono-beneficio">✨</div>
+        <h3>Formación continua</h3>
+        <p>Capacitaciones en ventas, redes sociales y liderazgo, para que crezcas personal y profesionalmente.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-final" id="unete">
+    <div class="cta-contenido">
+      <h2>Tu momento es <em>ahora</em></h2>
+      <p>Miles de mujeres ya están construyendo la vida que sueñan. Solo falta una más: tú. Déjanos tus datos y empecemos este viaje juntas.</p>
+      <a href="unete.html" class="btn-claro">Quiero unirme →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo">Raíz<span>Viva</span></div>
+    <p>Cultivamos liderazgos femeninos con propósito.</p>
+    <div class="redes">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+    <p style="margin-top: 1rem; opacity: 0.7;">© 2026 RaízViva. Todos los derechos reservados.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Georgia', serif; background: #f5f1e8; margin: 0; padding: 0; color: #3a3a30; }
+  .wrap { max-width: 600px; margin: 0 auto; background: #fdfbf7; }
+  .header { background: linear-gradient(135deg, #8ba888, #4a5d45); padding: 40px 30px; text-align: center; }
+  .header h1 { color: #fdfbf7; font-size: 32px; margin: 0; font-weight: 400; letter-spacing: 1px; }
+  .header p { color: rgba(253, 251, 247, 0.85); font-size: 14px; margin: 8px 0 0; letter-spacing: 2px; text-transform: uppercase; }
+  .contenido { padding: 40px 30px; }
+  .contenido h2 { color: #4a5d45; font-size: 26px; margin: 0 0 20px; }
+  .contenido p { line-height: 1.7; color: #6b6b5e; font-size: 15px; }
+  .destacado { background: #f5f1e8; border-left: 4px solid #c17b5c; padding: 20px; margin: 25px 0; border-radius: 8px; }
+  .destacado p { margin: 0; color: #3a3a30; }
+  .boton { display: inline-block; background: #4a5d45; color: #fdfbf7; padding: 14px 32px; border-radius: 50px; text-decoration: none; font-size: 14px; letter-spacing: 1px; margin: 20px 0; }
+  .footer { background: #e8dfd0; padding: 25px 30px; text-align: center; font-size: 12px; color: #6b6b5e; }
+  .firma { font-style: italic; color: #c17b5c; margin-top: 20px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>RaízViva</h1>
+      <p>Cultivamos liderazgos femeninos</p>
+    </div>
+
+    <div class="contenido">
+      <h2>¡Hola {{nombre}}! 🌿</h2>
+
+      <p>Recibimos tu registro y queremos darte la bienvenida a esta nueva etapa. En <strong>RaízViva</strong> creemos que cada mujer tiene una fuerza única para crecer, liderar y transformar.</p>
+
+      <p>Esto es lo que viene ahora:</p>
+
+      <div class="destacado">
+        <p><strong>1.</strong> Una de nuestras líderes te contactará por WhatsApp dentro de las próximas 24 horas.</p>
+      </div>
+      <div class="destacado">
+        <p><strong>2.</strong> Te compartiremos información sobre nuestro modelo, comisiones y cómo empezar.</p>
+      </div>
+      <div class="destacado">
+        <p><strong>3.</strong> Podrás agendar una llamada de bienvenida sin compromiso.</p>
+      </div>
+
+      <p style="text-align: center;">
+        <a href="{{appUrl}}" class="boton">Conoce más sobre nosotras</a>
+      </p>
+
+      <p class="firma">Con cariño,<br>El equipo de RaízViva 💚</p>
+    </div>
+
+    <div class="footer">
+      <p>Recibiste este correo porque te registraste en raizviva.com</p>
+      <p>© RaízViva — Todos los derechos reservados</p>
+    </div>
+  </div>
+</body>
+</html>
