@@ -1,6 +1,7 @@
 const express = require('express');
 const registroService = require('../services/registroService');
 const vendedoraService = require('../services/vendedoraService');
+const contenidoService = require('../services/contenidoService');
 const { requiereAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -250,6 +251,62 @@ router.post('/admin/anuncios', async (req, res) => {
   try {
     res.status(201).json({ ok: true, anuncio: await vendedoraService.publicarAnuncio(req.body || {}) });
   } catch (err) { errAdmin(res, err, 'POST /admin/anuncios'); }
+});
+
+/* ===== Encuestas y capacitación ===== */
+
+router.get('/admin/encuestas', async (req, res) => {
+  try {
+    res.json({ ok: true, encuestas: await contenidoService.listarEncuestas({ soloActivas: false }) });
+  } catch (err) { errAdmin(res, err, 'GET /admin/encuestas'); }
+});
+
+router.post('/admin/encuestas', async (req, res) => {
+  try {
+    res.status(201).json({ ok: true, encuesta: await contenidoService.crearEncuesta(req.body || {}) });
+  } catch (err) { errAdmin(res, err, 'POST /admin/encuestas'); }
+});
+
+router.patch('/admin/encuestas/:id', async (req, res) => {
+  try {
+    if (!idValido(req.params.id)) return res.status(400).json({ ok: false, mensaje: 'ID inválido' });
+    res.json({ ok: true, encuesta: await contenidoService.actualizarEncuesta(req.params.id, req.body || {}) });
+  } catch (err) { errAdmin(res, err, 'PATCH /admin/encuestas/:id'); }
+});
+
+router.delete('/admin/encuestas/:id', async (req, res) => {
+  try {
+    if (!idValido(req.params.id)) return res.status(400).json({ ok: false, mensaje: 'ID inválido' });
+    await contenidoService.eliminarEncuesta(req.params.id);
+    res.json({ ok: true, mensaje: 'Eliminada' });
+  } catch (err) { errAdmin(res, err, 'DELETE /admin/encuestas/:id'); }
+});
+
+router.get('/admin/capacitaciones', async (req, res) => {
+  try {
+    res.json({ ok: true, capacitaciones: await contenidoService.listarCapacitaciones({ soloActivas: false }) });
+  } catch (err) { errAdmin(res, err, 'GET /admin/capacitaciones'); }
+});
+
+router.post('/admin/capacitaciones', async (req, res) => {
+  try {
+    res.status(201).json({ ok: true, capacitacion: await contenidoService.crearCapacitacion(req.body || {}) });
+  } catch (err) { errAdmin(res, err, 'POST /admin/capacitaciones'); }
+});
+
+router.patch('/admin/capacitaciones/:id', async (req, res) => {
+  try {
+    if (!idValido(req.params.id)) return res.status(400).json({ ok: false, mensaje: 'ID inválido' });
+    res.json({ ok: true, capacitacion: await contenidoService.actualizarCapacitacion(req.params.id, req.body || {}) });
+  } catch (err) { errAdmin(res, err, 'PATCH /admin/capacitaciones/:id'); }
+});
+
+router.delete('/admin/capacitaciones/:id', async (req, res) => {
+  try {
+    if (!idValido(req.params.id)) return res.status(400).json({ ok: false, mensaje: 'ID inválido' });
+    await contenidoService.eliminarCapacitacion(req.params.id);
+    res.json({ ok: true, mensaje: 'Eliminado' });
+  } catch (err) { errAdmin(res, err, 'DELETE /admin/capacitaciones/:id'); }
 });
 
 module.exports = router;
