@@ -43,28 +43,27 @@ async function registrosPorPeriodo(rango = '30d') {
   const { rows } = await query(`
     WITH periodos AS (
       SELECT generate_series(
-        DATE_TRUNC($2, NOW() - INTERVAL '${interval}'),
-        DATE_TRUNC($2, NOW()),
-        ('1 ' || $2)::INTERVAL
+        DATE_TRUNC($1::text, NOW() - INTERVAL '${interval}'),
+        DATE_TRUNC($1::text, NOW()),
+        ('1 ' || $1::text)::INTERVAL
       ) AS periodo
     ),
     conteos AS (
       SELECT
-        DATE_TRUNC($2, fecha) AS periodo,
+        DATE_TRUNC($1::text, fecha) AS periodo,
         COUNT(*)::int AS total
       FROM registros
       WHERE fecha >= NOW() - INTERVAL '${interval}'
       GROUP BY 1
     )
     SELECT
-      TO_CHAR(p.periodo, $3) AS etiqueta,
+      TO_CHAR(p.periodo, $2::text) AS etiqueta,
       COALESCE(c.total, 0) AS total,
       p.periodo AS fecha_cruda
     FROM periodos p
     LEFT JOIN conteos c ON c.periodo = p.periodo
     ORDER BY p.periodo ASC
   `, [
-    null,
     granularidad,
     granularidad === 'day' ? 'YYYY-MM-DD' : granularidad === 'week' ? 'YYYY-MM-DD' : 'YYYY-MM'
   ]);
