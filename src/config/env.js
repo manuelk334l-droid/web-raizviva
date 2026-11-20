@@ -1,12 +1,13 @@
 require('dotenv').config();
 
-const requeridas = ['ADMIN_KEY', 'DATABASE_URL'];
+const requeridas = ['ADMIN_KEY'];
 const opcionales = [
   'SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'EMAIL_FROM', 'EMAIL_ADMIN',
   'TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_WHATSAPP_FROM', 'WHATSAPP_ADMIN'
 ];
 function validar() {
   const faltantes = requeridas.filter(k => !process.env[k]);
+  if (!process.env.DATABASE_URL && !process.env.DB_HOST) faltantes.push('DATABASE_URL (o DB_HOST, DB_USER, DB_PASSWORD)');
   if (faltantes.length > 0) {
     console.error('❌ Variables de entorno faltantes:', faltantes.join(', '));
     process.exit(1);
@@ -29,3 +30,4 @@ function validar() {
 }
 
 module.exports = { validar };
+
