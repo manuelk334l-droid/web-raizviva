@@ -1,6 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const vendedoraService = require('../services/vendedoraService');
+const contenidoService = require('../services/contenidoService');
 const { requiereVendedora } = require('../middleware/authVendedora');
 
 const router = express.Router();
@@ -44,6 +45,22 @@ router.post('/cambiar-clave', limiteLogin, requiereVendedora, async (req, res) =
     res.json({ ok: true, ...r });
   } catch (err) {
     responderError(res, err, 'POST /vendedora/cambiar-clave');
+  }
+});
+
+router.get('/encuestas', requiereVendedora, async (req, res) => {
+  try {
+    res.json({ ok: true, encuestas: await contenidoService.listarEncuestas({ soloActivas: true }) });
+  } catch (err) {
+    responderError(res, err, 'GET /vendedora/encuestas');
+  }
+});
+
+router.get('/capacitaciones', requiereVendedora, async (req, res) => {
+  try {
+    res.json({ ok: true, capacitaciones: await contenidoService.listarCapacitaciones({ soloActivas: true }) });
+  } catch (err) {
+    responderError(res, err, 'GET /vendedora/capacitaciones');
   }
 });
 
