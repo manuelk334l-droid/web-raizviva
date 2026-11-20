@@ -2,13 +2,13 @@ const express = require('express');
 const registroService = require('../services/registroService');
 const vendedoraService = require('../services/vendedoraService');
 const contenidoService = require('../services/contenidoService');
-const { requiereAdmin } = require('../middleware/auth');
+const { requiereAdmin, claveValida } = require('../middleware/auth');
 
 const router = express.Router();
 
 router.post('/admin/login', (req, res) => {
-  const { clave } = req.body;
-  if (clave === process.env.ADMIN_KEY) {
+  const clave = String((req.body && req.body.clave) || '').trim();
+  if (claveValida(clave)) {
     return res.json({ ok: true, mensaje: 'Acceso concedido' });
   }
   res.status(401).json({ ok: false, mensaje: 'Clave incorrecta' });
@@ -310,3 +310,4 @@ router.delete('/admin/capacitaciones/:id', async (req, res) => {
 });
 
 module.exports = router;
+
