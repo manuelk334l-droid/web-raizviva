@@ -2,20 +2,27 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 let poolConfig;
+let hostUsado = 'desconocido';
 
-if (process.env.DATABASE_URL) {
+const limpiar = (v) => String(v || '').trim().replace(/^["']|["']$/g, '');
+
+if (process.env.DB_HOST) {
+  // Modo por partes: evita problemas con símbolos en la contraseña.
+  hostUsado = limpiar(process.env.DB_HOST);
   poolConfig = {
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    host: hostUsado,
+    port: Number(limpiar(process.env.DB_PORT)) || 6543,
+    user: limpiar(process.env.DB_USER),
+    password: process.env.DB_PASSWORD, // tal cual, sin recortar
+    database: limpiar(process.env.DB_NAME) || 'postgres',
+    ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false }
   };
 } else {
+  const url = limpiar(process.env.DATABASE_URL);
+  try { hostUsado = new URL(url).hostname || 'vacío'; } catch { hostUsado = 'ilegible'; }
   poolConfig = {
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT) || 6543,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME || 'postgres',
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    connectionString: url,
+    ssl: { rejectUnauthorized: false }
   };
 }
 
@@ -75,4 +82,5 @@ async function testConexion() {
   }
 }
 
-module.exports = { pool, query, transaccion, testConexion };
+module.exports = {
+  hostUsado: () => hostUsado, pool, query, transaccion, testConexion };
