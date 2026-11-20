@@ -863,7 +863,26 @@ k; }
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
+  const escAdm = (t) => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
   let CLAVE_ADMIN = sessionStorage.getItem('adminKey') || '';
+  const _fetchOriginal = window.fetch.bind(window);
+  window.fetch = async (...args) => {
+    const resp = await _fetchOriginal(...args);
+    const url = typeof args[0] === 'string' ? args[0] : '';
+    const enviaClave = args[1] && args[1].headers && args[1].headers['x-admin-key'];
+    if (resp.status === 401 && url.startsWith('/api/') && enviaClave) {
+      sessionStorage.removeItem('adminKey');
+      CLAVE_ADMIN = '';
+      document.getElementById('dashboard').classList.remove('activo');
+      document.getElementById('loginScreen').style.display = '';
+      const le = document.getElementById('loginError');
+      le.textContent = 'Tu sesión venció o la clave cambió. Entra de nuevo.';
+      le.classList.add('visible');
+    }
+    return resp;
+  };
+
   let registros = [];
   let registroActual = null;
 
@@ -928,15 +947,15 @@ k; }
   });
 
   if (CLAVE_ADMIN) {
-    fetch('/api/registros', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+    fetch('/api/registros', { headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) } })
       .then(r => r.ok ? entrarAlPanel() : sessionStorage.removeItem('adminKey'));
   }
 
   async function cargarDatos() {
     try {
       const [resRegistros, resStats] = await Promise.all([
-        fetch('/api/registros', { headers: { 'x-admin-key': CLAVE_ADMIN } }),
-        fetch('/api/estadisticas', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+        fetch('/api/registros', { headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) } }),
+        fetch('/api/estadisticas', { headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) } })
       ]);
 
       const dataRegistros = await resRegistros.json();
@@ -987,15 +1006,15 @@ k; }
     tbody.innerHTML = filtrados.map(r => `
       <tr data-id="${r.id}">
         <td>
-          <div class="nombre">${r.nombre}</div>
+          <div class="nombre">${escAdm(r.nombre)}</div>
           <div class="email">${formatearFecha(r.fecha)}</div>
         </td>
         <td>
-          <div class="email">${r.email}</div>
-          <div class="email">${r.whatsapp}</div>
+          <div class="email">${escAdm(r.email)} ${r.email_confirmado ? '<span title="Correo confirmado" style="color:#4a5d45">✓</span>' : '<span title="Falta confirmar el correo" style="color:#b15a4d;font-size:0.72rem">(sin confirmar)</span>'}</div>
+          <div class="email">${escAdm(r.whatsapp)}</div>
         </td>
-        <td>${r.ciudad}</td>
-        <td>${r.edad}</td>
+        <td>${escAdm(r.ciudad)}</td>
+        <td>${escAdm(r.edad)}</td>
         <td>${r.experiencia === 'Si' ? 'Con experiencia' : 'Sin experiencia'}</td>
         <td><span class="badge badge-${r.estado}">${r.estado.replace('-', ' ')}</span></td>
         <td>
@@ -1075,7 +1094,7 @@ k; }
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': CLAVE_ADMIN
+          'x-admin-key': encodeURIComponent(CLAVE_ADMIN)
         },
         body: JSON.stringify({ estado: nuevoEstado, notas })
       });
@@ -1106,7 +1125,7 @@ k; }
     try {
       const res = await fetch(`/api/registros/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-key': CLAVE_ADMIN }
+        headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) }
       });
       const data = await res.json();
 
@@ -1127,7 +1146,7 @@ k; }
   $('filtroExperiencia').addEventListener('change', renderTabla);
 
   $('btnExportar').addEventListener('click', () => {
-    fetch('/api/exportar/csv', { headers: { 'x-admin-key': CLAVE_ADMIN } })
+    fetch('/api/exportar/csv', { headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) } })
       .then(res => res.blob())
       .then(blob => {
         const url = URL.createObjectURL(blob);
@@ -1219,7 +1238,7 @@ k; }
 
     try {
       const res = await fetch(`/api/analytics/resumen?rango=${rango}`, {
-        headers: { 'x-admin-key': CLAVE_ADMIN }
+        headers: { 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) }
       });
 
       const json = await res.json();
@@ -1547,7 +1566,7 @@ k; }
   async function apiContenido(ruta, metodo = 'GET', cuerpo) {
     const res = await fetch('/api/admin' + ruta, {
       method: metodo,
-      headers: { 'Content-Type': 'application/json', 'x-admin-key': CLAVE_ADMIN },
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': encodeURIComponent(CLAVE_ADMIN) },
       body: cuerpo ? JSON.stringify(cuerpo) : undefined
     });
     let json = {};
