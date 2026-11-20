@@ -22,3 +22,11 @@ Landing + formulario de registro + backend (Node/Express) + base de datos Postgr
 - Login propio (`/api/vendedora/login`), claves con scrypt, sesión firmada de 8 h, bloqueo tras 5 intentos fallidos y cambio de clave obligatorio en el primer ingreso.
 - Cada vendedora solo ve sus datos; de sus referidas ve únicamente "Nombre I.", ciudad, fecha y estado.
 - ⚠ Los niveles (Brote/Raíz/Bosque) y porcentajes de comisión de `niveles.js` son valores de ejemplo.
+
+## Encuestas y Capacitación
+
+1. Ejecuta `src/db/schema-contenido.sql` en Supabase > SQL Editor (una sola vez).
+2. En `/admin` aparecen las pestañas **Encuestas** y **Capacitación**: agrega título, enlace y descripción.
+3. Las vendedoras lo ven en su panel (`/vendedora`) en las pestañas del mismo nombre.
+4. Videos: enlaces de YouTube (recomendado: "no listado"), Vimeo, Google Drive o un .mp4 directo. Solo se aceptan enlaces `https://`.
+
